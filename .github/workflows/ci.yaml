@@ -28,6 +28,10 @@ jobs:
       # - name: Run verify types
       #   run: pnpm run verify-types
       - name: Build project
-        run: npm run build
+        run: |
+          touch .env.local
+          echo CONVEX_DEPLOYMENT=${{ secrets.CONVEX_DEPLOYMENT }} >> .env.local
+          echo NEXT_PUBLIC_CONVEX_URL=${{ secrets.NEXT_PUBLIC_CONVEX_URL }} >> .env.local
+          npm run build
       # - name: Run test with coverage
       #   run: pnpm run coverage
