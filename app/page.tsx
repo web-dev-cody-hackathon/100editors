@@ -1,17 +1,17 @@
 "use client";
 import { useQuery, useMutation } from "convex/react";
 import { api } from "../convex/_generated/api";
+import type { ChangeEvent } from "react";
+import type { Id } from "@/convex/_generated/dataModel";
 
 export default function Home() {
   const inputValue = useQuery(api.input.getInputValue);
 
   const mutateValue = useMutation(api.input.updateInputValue);
 
-  console.log(inputValue);
-
-  const handleOnChange = (event) => { // Feel free to investigate which would be the correct type :eyes:
+  const handleOnChange = (event: ChangeEvent<HTMLInputElement>) => {
     const payload = {
-      id: event.target.attributes["hidden-id"].value,
+      id: event.target.attributes.getNamedItem("hidden-id")?.value as Id<"input">,
       text: event.target.value
     }
     mutateValue(payload);
