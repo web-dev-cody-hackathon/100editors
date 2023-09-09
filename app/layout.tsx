@@ -16,6 +16,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <script>
+        console.log("hi");
+      </script>
       <body className={inter.className}>{children}</body>
     </html>
   )
