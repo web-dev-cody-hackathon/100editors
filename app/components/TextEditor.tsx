@@ -1,6 +1,6 @@
 import dynamic from "next/dynamic";
 // we must disable SSR since ReactQuill attempts to access the `document`
-const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
+const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
 import type { ReactQuillProps } from "react-quill";
 
