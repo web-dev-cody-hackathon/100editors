@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "format": "prettier ./ --check .",
+    "test": "vitest"
   },
   "dependencies": {
     "@types/node": "20.5.9",
@@ -25,6 +27,9 @@
     "typescript": "5.2.2"
   },
   "devDependencies": {
-    "@types/quill": "^2.0.11"
+    "@types/quill": "^2.0.11",
+    "prettier": "3.0.3",
+    "@testing-library/react": "^14.0.0",
+    "vitest": "^0.34.4"
   }
 }
