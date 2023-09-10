@@ -1,5 +1,4 @@
 import "./globals.css";
-import "react-quill/dist/quill.snow.css";
 import { Inter } from "next/font/google";
 import ConvexClientProvider from "./providers/ConvexClientProvider";
 
