@@ -35,3 +35,5 @@ jobs:
           npm run build
       # - name: Run test with coverage
       #   run: pnpm run coverage
+      - name: Test
+        run: npm run test
