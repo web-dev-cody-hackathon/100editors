@@ -30,9 +30,8 @@ export default function Home() {
       <h1 className="mb-6 text-3xl">100Editors</h1>
       <TextEditor
         className="w-full"
-        modules={{ toolbar: false }}
-        formats={[]}
-        value={inputValue?.text ?? ""}
+        value={isLoading(inputValue) ? "Loading" : inputValue.text}
+        readOnly={isLoading(inputValue)}
         onChange={handleOnChange}
       />
     </main>
