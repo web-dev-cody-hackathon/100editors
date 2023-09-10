@@ -1,10 +1,9 @@
 "use client";
 import { useQuery, useMutation } from "convex/react";
 import { api } from "../convex/_generated/api";
-import ReactQuill from "react-quill";
+import TextEditor from "./components/TextEditor";
 
 import type { ReactQuillProps } from "react-quill";
-import type { Id } from "@/convex/_generated/dataModel";
 
 type OnChange = ReactQuillProps["onChange"];
 
@@ -27,9 +26,8 @@ export default function Home() {
   };
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <ReactQuill
-        hidden-id={inputValue?._id}
+    <main className="flex min-h-screen flex-col items-center p-24">
+      <TextEditor
         className="w-full"
         modules={{ toolbar: false }}
         formats={[]}
