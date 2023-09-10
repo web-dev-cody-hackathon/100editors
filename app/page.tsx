@@ -9,12 +9,14 @@ type OnChange = ReactQuillProps["onChange"];
 
 export default function Home() {
   const inputValue = useQuery(api.input.getInputValue);
-
   const mutateValue = useMutation(api.input.updateInputValue);
 
+  const isLoading = (query: unknown): query is undefined | null => {
+    return query === undefined || query === null;
+  };
+
   const handleOnChange: OnChange = (_value, _delta, _source, editor) => {
-    if (inputValue === undefined || inputValue === null) {
-      console.log("Convex query loading...");
+    if (isLoading(inputValue)) {
       return;
     }
 
