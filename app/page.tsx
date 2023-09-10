@@ -11,19 +11,21 @@ export default function Home() {
 
   const handleOnChange = (event: ChangeEvent<HTMLInputElement>) => {
     const payload = {
-      id: event.target.attributes.getNamedItem("hidden-id")?.value as Id<"input">,
-      text: event.target.value
-    }
+      id: event.target.attributes.getNamedItem("hidden-id")
+        ?.value as Id<"input">,
+      text: event.target.value,
+    };
     mutateValue(payload);
-  }
+  };
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <input 
+      <input
         hidden-id={inputValue?._id}
-        className="border-2 border-gray-400 rounded-md p-2 text-slate-950" 
-        value={inputValue?.text || ""} 
-        onChange={handleOnChange}/>
+        className="border-2 border-gray-400 rounded-md p-2 text-slate-950"
+        value={inputValue?.text || ""}
+        onChange={handleOnChange}
+      />
     </main>
   );
 }
