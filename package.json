@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "format": "prettier ./ --check .",
     "test": "vitest"
   },
   "dependencies": {
@@ -25,6 +26,7 @@
     "typescript": "5.2.2"
   },
   "devDependencies": {
+    "prettier": "3.0.3",
     "@testing-library/react": "^14.0.0",
     "vitest": "^0.34.4"
   }
