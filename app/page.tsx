@@ -14,8 +14,13 @@ export default function Home() {
   const mutateValue = useMutation(api.input.updateInputValue);
 
   const handleOnChange: OnChange = (_value, _delta, _source, editor) => {
+    if (inputValue === undefined || inputValue === null) {
+      console.log("Convex query loading...");
+      return;
+    }
+
     const payload = {
-      id: inputValue?._id as Id<"input">,
+      id: inputValue._id,
       text: editor.getHTML(),
     };
     mutateValue(payload);
