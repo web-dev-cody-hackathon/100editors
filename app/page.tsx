@@ -1,5 +1,11 @@
 "use client";
-import TextEditor from "./components/TextEditor";
+
+import dynamic from "next/dynamic";
+
+// we must disable SSR since ReactQuill attempts to access the `document`
+const TextEditor = dynamic(() => import("./components/TextEditor"), {
+  ssr: false,
+});
 
 export default function Home() {
   return (

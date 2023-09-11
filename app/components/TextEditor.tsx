@@ -1,6 +1,5 @@
 import dynamic from "next/dynamic";
-// we must disable SSR since ReactQuill attempts to access the `document`
-const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
+import ReactQuill from "react-quill";
 import { useQuery, useMutation } from "convex/react";
 import { useState } from "react";
 import { api } from "../../convex/_generated/api";
