@@ -15,7 +15,7 @@ export default function TextEditor(props: ReactQuillProps) {
   const inputValue = useQuery(api.input.getInputValue);
   const mutateValue = useMutation(api.input.updateInputValue);
   const [text, setText] = useState(
-    localStorage.getItem(LOCAL_STORAGE_KEY) ?? "New Document Text!"
+    localStorage.getItem(LOCAL_STORAGE_KEY) ?? ""
   );
 
   const isLoading = (query: unknown): query is undefined | null => {
