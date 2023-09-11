@@ -23,18 +23,16 @@ export default function TextEditor(props: ReactQuillProps) {
   };
 
   const handleOnChange: OnChange = (_value, _delta, _source, editor) => {
-    if (isLoading(inputValue)) {
-      return;
-    }
-
     const currentText = editor.getHTML();
-
-    localStorage.setItem(LOCAL_STORAGE_KEY, currentText);
     setText(currentText);
-    mutateValue({
-      id: inputValue._id,
-      text: currentText,
-    });
+    localStorage.setItem(LOCAL_STORAGE_KEY, currentText);
+
+    if (!isLoading(inputValue)) {
+      mutateValue({
+        id: inputValue._id,
+        text: currentText,
+      });
+    }
   };
 
   return (
