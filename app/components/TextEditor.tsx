@@ -3,7 +3,7 @@ import * as Y from "yjs";
 import { QuillBinding } from "y-quill";
 // TODO figure out how to make the types work here
 // @ts-ignore because the types don't want to work :(
-import { WebrtcProvider } from 'y-webrtc'
+import { WebrtcProvider } from "y-webrtc";
 import { useEffect, useRef, useState } from "react";
 
 import type { ReactQuillProps } from "react-quill";
@@ -14,10 +14,10 @@ export default function TextEditor(props: ReactQuillProps) {
   const [text, setText] = useState<Y.Text>();
   const [provider, setProvider] = useState<any>();
 
-   useEffect(() => {
+  useEffect(() => {
     const yDoc = new Y.Doc();
     const yText = yDoc.getText("quill");
-    const yProvider = new WebrtcProvider('quill-demo-room', yDoc)
+    const yProvider = new WebrtcProvider("quill-demo-room", yDoc);
 
     setText(yText);
     setProvider(yProvider);
@@ -27,7 +27,6 @@ export default function TextEditor(props: ReactQuillProps) {
       yProvider?.destroy();
     };
   }, []);
-
 
   // TODO actually error handle?
   if (!text || !provider) {
