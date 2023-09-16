@@ -26,7 +26,8 @@ export default function TextEditor(props: ReactQuillProps) {
   useEffect(() => {
     const yDoc = new Y.Doc();
     const yText = yDoc.getText("quill");
-    const yProvider = new WebrtcProvider("quill-demo-room", yDoc);
+    // default of 20 max connections
+    const yProvider = new WebrtcProvider("quill-demo-room", yDoc, { signaling: ['ws://localhost:4444'] });
 
     setText(yText);
     setProvider(yProvider);
