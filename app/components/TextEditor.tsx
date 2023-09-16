@@ -1,49 +1,37 @@
 import ReactQuill from "react-quill";
 import * as Y from "yjs";
 import { QuillBinding } from "y-quill";
-
-import { useQuery, useMutation } from "convex/react";
+// TODO figure out how to make the types work here
+// @ts-ignore because the types don't want to work :(
+import { WebrtcProvider } from 'y-webrtc'
 import { useEffect, useRef, useState } from "react";
-import { api } from "../../convex/_generated/api";
-
 
 import type { ReactQuillProps } from "react-quill";
 
 import styles from "./Editor.module.css";
-import "react-quill/dist/quill.snow.css";
-
-const LOCAL_STORAGE_KEY = "local storage key";
 
 export default function TextEditor(props: ReactQuillProps) {
-  const inputValue = useQuery(api.input.getInputValue);
   const [text, setText] = useState<Y.Text>();
-  // const [provider, setProvider] = useState<any>();
+  const [provider, setProvider] = useState<any>();
 
-  const isLoading = (query: unknown): query is undefined | null => {
-    return query === undefined || query === null;
-  };
-
-  // update local copy when db updates
    useEffect(() => {
     const yDoc = new Y.Doc();
     const yText = yDoc.getText("quill");
-    // const yProvider = new LiveblocksProvider(room, yDoc);
+    const yProvider = new WebrtcProvider('quill-demo-room', yDoc)
 
     setText(yText);
-    // setProvider(yProvider);
+    setProvider(yProvider);
 
     return () => {
       yDoc?.destroy();
-      // yProvider?.destroy();
+      yProvider?.destroy();
     };
-
   }, []);
 
 
-  if (!text 
-    // || !provider
-    ) {
-    return null;
+  // TODO actually error handle?
+  if (!text || !provider) {
+    return <h1>your code is broken</h1>;
   }
 
   return (
@@ -51,8 +39,7 @@ export default function TextEditor(props: ReactQuillProps) {
       modules={{ toolbar: false }}
       formats={[]}
       yText={text}
-      provider={4}
-      readOnly={isLoading(inputValue)}
+      provider={provider}
       {...props}
     />
   );
@@ -67,21 +54,20 @@ function QuillEditor({ yText, provider }: EditorProps) {
   const reactQuillRef = useRef<ReactQuill>(null);
   // Set up Yjs and Quill
   useEffect(() => {
-    let quill: ReturnType<ReactQuill["getEditor"]>;
-    let binding: QuillBinding;
-
     if (!reactQuillRef.current) {
       return;
     }
 
-    quill = reactQuillRef.current.getEditor();
-    binding = new QuillBinding(yText, quill, provider.awareness);
+    let quill = reactQuillRef.current.getEditor();
+    let binding = new QuillBinding(yText, quill, provider.awareness);
+
     return () => {
       binding?.destroy?.();
     };
-  }, [yText, provider]);
+  }, [provider.awareness, yText]);
 
   return (
+    // TODO use tailwind for this
     <div className={styles.container}>
       <div className={styles.editorContainer}>
         <ReactQuill
