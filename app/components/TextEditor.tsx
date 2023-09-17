@@ -34,6 +34,7 @@ export default function TextEditor(props: ReactQuillProps) {
     };
   }, []);
 
+  // TODO proper error handling
   if (!text || !provider) {
     return <h1>your code is broken</h1>;
   }
