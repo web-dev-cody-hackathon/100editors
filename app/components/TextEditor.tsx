@@ -22,7 +22,7 @@ export default function TextEditor(props: ReactQuillProps) {
     const yProvider: WebrtcProviderType = new WebrtcProvider(
       "quill-demo-room",
       yDoc,
-      { signaling: ["ws://webrtc-production-ed77.up.railway.app"] }
+      { signaling: ["wss://webrtc-production-ed77.up.railway.app"] }
     );
 
     setText(yText);
