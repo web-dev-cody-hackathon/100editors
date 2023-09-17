@@ -5,22 +5,15 @@ import { QuillBinding } from "y-quill";
 import { WebrtcProvider } from "y-webrtc";
 import type { WebrtcProvider as WebrtcProviderType } from "../types/y-webrtc";
 
-import { useQuery } from "convex/react";
 import { useEffect, useRef, useState } from "react";
-import { api } from "../../convex/_generated/api";
 
 import type { ReactQuillProps } from "react-quill";
 
 import "react-quill/dist/quill.snow.css";
 
 export default function TextEditor(props: ReactQuillProps) {
-  const inputValue = useQuery(api.input.getInputValue);
   const [text, setText] = useState<Y.Text>();
   const [provider, setProvider] = useState<WebrtcProviderType>();
-
-  const isLoading = (query: unknown): query is undefined | null => {
-    return query === undefined || query === null;
-  };
 
   useEffect(() => {
     const yDoc = new Y.Doc();
@@ -48,7 +41,6 @@ export default function TextEditor(props: ReactQuillProps) {
       formats={[]}
       yText={text}
       provider={provider}
-      readOnly={isLoading(inputValue)}
       {...props}
     />
   );
