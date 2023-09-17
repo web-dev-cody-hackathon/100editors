@@ -11,7 +11,6 @@ import { api } from "../../convex/_generated/api";
 
 import type { ReactQuillProps } from "react-quill";
 
-import styles from "./Editor.module.css";
 import "react-quill/dist/quill.snow.css";
 
 export default function TextEditor(props: ReactQuillProps) {
@@ -77,11 +76,10 @@ function QuillEditor({ yText, provider }: EditorProps) {
   }, [provider.awareness, yText]);
 
   return (
-    // TODO use tailwind for this
-    <div className={styles.container}>
-      <div className={styles.editorContainer}>
+    <div className="flex flex-col relative w-full h-ful rounded-xl">
+      <div className="relative h-full">
         <ReactQuill
-          className={styles.editor}
+          className="grow w-full h-full p-4 rounded-[inherit]"
           placeholder="Start typing here…"
           ref={reactQuillRef}
           theme="snow"
