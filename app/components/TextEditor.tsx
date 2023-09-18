@@ -1,58 +1,93 @@
-import dynamic from "next/dynamic";
 import ReactQuill from "react-quill";
-import { useQuery, useMutation } from "convex/react";
-import { useEffect, useState } from "react";
-import { api } from "../../convex/_generated/api";
+import * as Y from "yjs";
+import { QuillBinding } from "y-quill";
+// @ts-ignore types aren't exported correctly. They are taken directly from a copy of the type file below
+import { WebrtcProvider } from "y-webrtc";
+import type { WebrtcProvider as WebrtcProviderType } from "../types/y-webrtc";
+
+import { useEffect, useRef, useState } from "react";
 
 import type { ReactQuillProps } from "react-quill";
-type OnChange = ReactQuillProps["onChange"];
 
 import "react-quill/dist/quill.snow.css";
 
-const LOCAL_STORAGE_KEY = "local storage key";
-
 export default function TextEditor(props: ReactQuillProps) {
-  const inputValue = useQuery(api.input.getInputValue);
-  const mutateValue = useMutation(api.input.updateInputValue);
-  const [text, setText] = useState(
-    localStorage.getItem(LOCAL_STORAGE_KEY) ?? ""
-  );
+  const [text, setText] = useState<Y.Text>();
+  const [provider, setProvider] = useState<WebrtcProviderType>();
 
-  const isLoading = (query: unknown): query is undefined | null => {
-    return query === undefined || query === null;
-  };
-
-  // update local copy when db updates
   useEffect(() => {
-    if (!isLoading(inputValue)) {
-      setText(inputValue.text);
-      localStorage.setItem(LOCAL_STORAGE_KEY, inputValue.text);
-    }
-  }, [inputValue]);
+    const yDoc = new Y.Doc();
+    const yText = yDoc.getText("quill");
+    // default of 20 max connections
+    const yProvider: WebrtcProviderType = new WebrtcProvider(
+      "quill-demo-room",
+      yDoc,
+      { signaling: ["wss://webrtc-production-ed77.up.railway.app"] }
+    );
 
-  const handleOnChange: OnChange = (_value, _delta, _source, editor) => {
-    // update local copy
-    const currentText = editor.getHTML();
-    setText(currentText);
-    localStorage.setItem(LOCAL_STORAGE_KEY, currentText);
+    setText(yText);
+    setProvider(yProvider);
 
-    // update db when loaded
-    if (!isLoading(inputValue)) {
-      mutateValue({
-        id: inputValue._id,
-        text: currentText,
-      });
-    }
-  };
+    return () => {
+      yDoc.destroy();
+      yProvider.destroy();
+    };
+  }, []);
+
+  // TODO proper error handling
+  if (!text || !provider) {
+    return <h1>your code is broken</h1>;
+  }
 
   return (
-    <ReactQuill
+    <QuillEditor
       modules={{ toolbar: false }}
       formats={[]}
-      value={text}
-      readOnly={isLoading(inputValue)}
-      onChange={handleOnChange}
+      yText={text}
+      provider={provider}
       {...props}
     />
+  );
+}
+
+type EditorProps = {
+  yText: Y.Text;
+  provider: WebrtcProviderType;
+};
+
+function QuillEditor({ yText, provider }: EditorProps) {
+  const reactQuillRef = useRef<ReactQuill>(null);
+  // Set up Yjs and Quill
+  useEffect(() => {
+    if (!reactQuillRef.current) {
+      return;
+    }
+
+    const quill = reactQuillRef.current.getEditor();
+    const binding = new QuillBinding(yText, quill, provider.awareness);
+
+    return () => {
+      binding?.destroy?.();
+    };
+  }, [provider.awareness, yText]);
+
+  return (
+    <div className="flex flex-col relative w-full h-ful rounded-xl">
+      <div className="relative h-full">
+        <ReactQuill
+          className="grow w-full h-full p-4 rounded-[inherit]"
+          placeholder="Start typing here…"
+          ref={reactQuillRef}
+          theme="snow"
+          modules={{
+            toolbar: false,
+            history: {
+              // Local undo shouldn't undo changes from remote users
+              userOnly: true,
+            },
+          }}
+        />
+      </div>
+    </div>
   );
 }
