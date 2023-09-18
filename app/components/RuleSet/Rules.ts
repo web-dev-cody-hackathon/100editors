@@ -11,14 +11,29 @@ interface RuleStore extends Array<Rule> {}
 export const Rules: RuleStore = [
   {
     name: "Starting text",
-    desciption: 'Must start with "Once upon a time"',
-    validation: (text: string) =>
-      text
-        .toLowerCase()
-        .slice(0, 20)
-        .replace(/\n$/, "")
-        .trim()
-        .startsWith("once upon a time"),
+    desciption:
+      'Must start with a fairy tale beginning like "Once upon a time", "In a land far far away" or "Long ago in a kingdom far far away"',
+    validation: (text: string) => {
+      const fairyTaleBeginnings = [
+        "once upon a time",
+        "once upon a time in a land far away",
+        "in a land far far away",
+        "in a kingdom far far away",
+        "long ago in a land far far away",
+        "Long ago in a kingdom far far away",
+        "Once upon a time in a land far away",
+        "Once upon a time in a land far far away",
+        "Once upon a time in a kingdom far away",
+        "Once upon a time in a kingdom far far away",
+      ];
+
+      const firstSentence = (text: string) =>
+        text.toLowerCase().slice(0, 100).replace(/\n$/, "").trim();
+
+      return fairyTaleBeginnings.some((beginning) =>
+        firstSentence(text).startsWith(beginning.toLowerCase().trim())
+      );
+    },
   },
   {
     name: "Ending text",
@@ -30,63 +45,75 @@ export const Rules: RuleStore = [
         .slice(-10)
         .replace(/\n$/, "")
         .trim()
-        .endsWith("the end"),
-  },
-  {
-    name: "Comma count",
-    desciption: "Must have at least 10 commas",
-    validation: (text: string) => text.toLowerCase().split(",").length >= 10,
-  },
-  {
-    name: "Word count",
-    desciption: "Must have at least 100 words",
-    validation: (text: string) => text.toLowerCase().split(" ").length >= 100,
+        .endsWith("the end".toLowerCase()),
   },
   {
     name: "Sentence count",
-    desciption: "Must have at least 10 sentences",
-    validation: (text: string) => text.toLowerCase().split(".").length >= 10,
-  },
-  {
-    name: "Paragraph count",
-    desciption: "Must have at least 3 paragraphs",
-    validation: (text: string) => text.toLowerCase().split("\n").length >= 3,
-  },
-  {
-    name: "Question count",
-    desciption: "Must have at least 3 questions",
-    validation: (text: string) => text.toLowerCase().split("?").length >= 3,
-  },
-  {
-    name: "Exclamation count",
-    desciption: "Must have at least 3 exclamation marks",
-    validation: (text: string) => text.toLowerCase().split("!").length >= 3,
-  },
-  {
-    name: "Colon count",
-    desciption: "Must have at least 3 colons",
-    validation: (text: string) => text.toLowerCase().split(":").length >= 3,
-  },
-  {
-    name: "Dog or cat",
-    desciption: "Must contain the word dog or cat",
-    validation: (text: string) =>
-      text.toLowerCase().includes("dog") || text.toLowerCase().includes("cat"),
-  },
-  {
-    name: "Phone number",
-    desciption: "Must contain a 9 digit phone number",
+    desciption: "Must have at least 3 sentences (ending with . or ! or ?)",
     validation: (text: string) => {
-      const phoneRegex = /\d{9}/;
-      return phoneRegex.test(text);
+      const sentences = text.match(/[^\.!\?]+[\.!\?]+/g);
+      return sentences ? sentences.length >= 3 : false;
     },
   },
   {
-    name: "Email address",
-    desciption: "Must contain a valid email address",
+    name: "Word in sentence count",
+    desciption:
+      "Must have at least 4 words in each sentence (separated by spaces, commas or dashes)",
     validation: (text: string) => {
-      const emailRegex = /\S+@\S+\.\S+/;
-      return emailRegex.test(text);
+      const sentences = text.match(/[^\.!\?]+[\.!\?]+/g);
+      if (sentences) {
+        return sentences.every((sentence) => {
+          const words = sentence.match(/[^ ,\-]+/g);
+          return words ? words.length >= 4 : false;
+        });
+      }
+      return false;
+    },
+  },
+  {
+    name: "Animal count",
+    desciption: "Must have at least 3 animals",
+    validation: (text: string) => {
+      const animals = [
+        "Dog",
+        "Doggy",
+        "Pup",
+        "Puppy",
+        "Canine",
+        "Cat",
+        "Kitty",
+        "Kitten",
+        "Fish",
+        "Fishy",
+        "Bird",
+        "Birb",
+        "Mouse",
+        "Mice",
+        "Rat",
+        "Ratty",
+        "Rabbit",
+        "Bunny",
+        "Hamster",
+        "Guinea Pig",
+        "Snake",
+        "Serpent",
+        "Turtle",
+        "Tortoise",
+        "Lizard",
+        "Frog",
+        "Amphibian",
+      ];
+
+      const cleanedText = text
+        .toLowerCase()
+        .replace(/[^a-z ]/g, "")
+        .replace(/\s+/g, " ")
+        .trim();
+
+      return (
+        cleanedText.split(" ").filter((word) => animals.includes(word))
+          .length >= 3
+      );
     },
   },
 ];

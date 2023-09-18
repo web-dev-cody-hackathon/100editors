@@ -17,7 +17,7 @@ export default function RuleSet(props: RuleSetProps) {
         Rules (Passed: {passedRules.length} of{" "}
         {passedRules.length + failedRules.length})
       </h3>
-      <div className="border-2 border-gray-300 rounded-md min-w-[20vw] p-6 min-h-[60vh]">
+      <div className="border-2 border-gray-300 rounded-md min-w-[20vw] p-6 min-h-[60vh] max-w-[20vw]">
         {failedRules.map((rule) => {
           return (
             <div key={rule.desciption} className="flex flex-row py-2">
