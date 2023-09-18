@@ -4,12 +4,14 @@ import { QuillBinding } from "y-quill";
 // @ts-ignore types aren't exported correctly. They are taken directly from a copy of the type file below
 import { WebrtcProvider } from "y-webrtc";
 import type { WebrtcProvider as WebrtcProviderType } from "../types/y-webrtc";
+import { Rules } from "./RuleSet/Rules";
 
 import { useEffect, useRef, useState } from "react";
 
 import type { ReactQuillProps } from "react-quill";
 
 import "react-quill/dist/quill.snow.css";
+import { validateText } from "./RuleSet/RuleValidation";
 
 export default function TextEditor(props: ReactQuillProps) {
   const [text, setText] = useState<Y.Text>();
@@ -85,6 +87,14 @@ function QuillEditor({ yText, provider }: EditorProps) {
               // Local undo shouldn't undo changes from remote users
               userOnly: true,
             },
+          }}
+          onChange={() => {
+            const { failedRules, passedRules } = validateText({
+              text: yText.toString(),
+              rules: Rules,
+            });
+
+            console.log({ failedRules, passedRules });
           }}
         />
       </div>
