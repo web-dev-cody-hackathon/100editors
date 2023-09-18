@@ -9,10 +9,9 @@ interface RuleSetProps {
 export default function RuleSet(props: RuleSetProps) {
   const { passedRules, failedRules } = props;
 
-  console.log(props);
+ 
 
   return (
-    // scrollbar invisible
     <div className="flex flex-col items-center align-items">
       <h3>
         Rules (Passed: {passedRules.length} of{" "}
