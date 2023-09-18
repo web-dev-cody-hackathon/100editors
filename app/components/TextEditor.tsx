@@ -4,7 +4,7 @@ import { QuillBinding } from "y-quill";
 // @ts-ignore types aren't exported correctly. They are taken directly from a copy of the type file below
 import { WebrtcProvider } from "y-webrtc";
 import type { WebrtcProvider as WebrtcProviderType } from "../types/y-webrtc";
-import { Rules } from "./RuleSet/Rules";
+import { Rule, Rules } from "./RuleSet/Rules";
 
 import { useEffect, useRef, useState } from "react";
 
@@ -13,13 +13,21 @@ import type { ReactQuillProps } from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { validateText } from "./RuleSet/RuleValidation";
 
-export default function TextEditor(props: ReactQuillProps) {
+interface TextEditorProps extends ReactQuillProps {
+  setPassedRules: React.Dispatch<React.SetStateAction<Rule[]>>;
+  setFailedRules: React.Dispatch<React.SetStateAction<Rule[]>>;
+  setIsCompleted: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export default function TextEditor(props: TextEditorProps) {
+  const { setPassedRules, setFailedRules, setIsCompleted } = props;
   const [text, setText] = useState<Y.Text>();
   const [provider, setProvider] = useState<WebrtcProviderType>();
 
   useEffect(() => {
     const yDoc = new Y.Doc();
     const yText = yDoc.getText("quill");
+
     // default of 20 max connections
     const yProvider: WebrtcProviderType = new WebrtcProvider(
       "quill-demo-room",
@@ -42,22 +50,33 @@ export default function TextEditor(props: ReactQuillProps) {
   }
 
   return (
-    <QuillEditor
-      modules={{ toolbar: false }}
-      formats={[]}
-      yText={text}
-      provider={provider}
-      {...props}
-    />
+    <div className="flex flex-col items-center align-items">
+      <h3>Editor</h3>
+      <QuillEditor
+        modules={{ toolbar: false }}
+        formats={[]}
+        yText={text}
+        provider={provider}
+        {...props}
+        setFailedRules={setFailedRules}
+        setPassedRules={setPassedRules}
+        setIsCompleted={setIsCompleted}
+      />
+    </div>
   );
 }
 
 type EditorProps = {
   yText: Y.Text;
   provider: WebrtcProviderType;
+  setPassedRules: React.Dispatch<React.SetStateAction<Rule[]>>;
+  setFailedRules: React.Dispatch<React.SetStateAction<Rule[]>>;
+  setIsCompleted: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-function QuillEditor({ yText, provider }: EditorProps) {
+function QuillEditor(props: EditorProps) {
+  const { yText, provider, setPassedRules, setFailedRules, setIsCompleted } =
+    props;
   const reactQuillRef = useRef<ReactQuill>(null);
   // Set up Yjs and Quill
   useEffect(() => {
@@ -73,14 +92,25 @@ function QuillEditor({ yText, provider }: EditorProps) {
     };
   }, [provider.awareness, yText]);
 
+  useEffect(() => {
+    validateText({
+      text: "",
+      rules: Rules,
+      setFailedRules,
+      setPassedRules,
+      setIsCompleted,
+    });
+  }, []);
+
   return (
-    <div className="flex flex-col relative w-full h-ful rounded-xl">
+    <div className="flex flex-col relative min-w-[50vw] min-h-[60vh] border-2">
       <div className="relative h-full">
         <ReactQuill
-          className="grow w-full h-full p-4 rounded-[inherit]"
+          className="h-full w-full"
           placeholder="Start typing here…"
           ref={reactQuillRef}
-          theme="snow"
+          // theme="snow"
+          // style={{ height: "100%" }}
           modules={{
             toolbar: false,
             history: {
@@ -88,13 +118,14 @@ function QuillEditor({ yText, provider }: EditorProps) {
               userOnly: true,
             },
           }}
-          onChange={() => {
-            const { failedRules, passedRules } = validateText({
-              text: yText.toString(),
+          onChange={(value: string, delta: any, source: any, editor: any) => {
+            validateText({
+              text: editor.getText(),
               rules: Rules,
+              setFailedRules,
+              setPassedRules,
+              setIsCompleted,
             });
-
-            console.log({ failedRules, passedRules });
           }}
         />
       </div>

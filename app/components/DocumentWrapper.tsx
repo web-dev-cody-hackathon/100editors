@@ -1,13 +1,21 @@
+import { useState } from "react";
 import RuleSet from "./RuleSet/RuleSet";
 import TextEditor from "./TextEditor";
-
-// Text editor takes a 3/4th of the page and the ruleset takes 1/4th vertically
+import { Rule } from "./RuleSet/Rules";
 
 export default function DocumentWrapper() {
+  const [passedRules, setPassedRules] = useState<Rule[]>([] as Rule[]);
+  const [failedRules, setFailedRules] = useState<Rule[]>([] as Rule[]);
+  const [isCompleted, setIsCompleted] = useState<boolean>(false);
+
   return (
-    <div className="flex justify-center content-center flex-row">
-      <TextEditor className="w-3/4 h-screen" />
-      <RuleSet className="w-1/4" />
+    <div className="flex justify-center content-center flex-row gap-5">
+      <TextEditor
+        setPassedRules={setPassedRules}
+        setFailedRules={setFailedRules}
+        setIsCompleted={setIsCompleted}
+      />
+      <RuleSet passedRules={passedRules} failedRules={failedRules}/>
     </div>
   );
 }
