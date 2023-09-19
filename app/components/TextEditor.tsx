@@ -16,6 +16,7 @@ import type { ReactQuillProps } from "react-quill";
 import { validateText } from "./RuleSet/RuleValidation";
 
 import "./textEditor.css";
+import { Sources } from "quill";
 
 interface TextEditorProps extends ReactQuillProps {
   slug: string;
@@ -35,7 +36,10 @@ export default function TextEditor(props: TextEditorProps) {
 
     // default of 20 max connections
     const yProvider: WebrtcProviderType = new WebrtcProvider(slug, yDoc, {
-      signaling: ["wss://webrtc-production-ed77.up.railway.app"],
+      signaling: [
+        // "wss://webrtc-production-ed77.up.railway.app",
+        "ws://localhost:4444",
+      ],
     });
 
     setText(yText);
@@ -149,8 +153,8 @@ function QuillEditor(props: EditorProps) {
           onChange={(
             _value: string,
             _delta: any,
-            _source: any,
-            editor: any
+            _source: Sources,
+            editor: ReactQuill.UnprivilegedEditor
           ) => {
             validateText({
               text: editor.getText(),
