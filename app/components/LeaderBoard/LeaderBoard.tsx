@@ -15,7 +15,7 @@ export default function LeaderBoard(props: LeaderBoardProps) {
   const { allSlugs } = props;
   return (
     <div>
-      {/* create a table with each slug on a row with passing and failing tests */}
+      <h2>Leaderboard</h2>
 
       {allSlugs?.map((slug) => {
         return (

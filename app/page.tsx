@@ -31,7 +31,7 @@ export default function Home() {
       </div>
       <div className="overflow-hidden relative xl:w-1/3 2xl:w-1/2">
         {/* <Image src="/books.jpg" fill objectFit="cover" quality={5} alt="" /> */}
-        <h2>score</h2>
+        
         <LeaderBoard allSlugs={allSlugs} />
       </div>
     </main>
