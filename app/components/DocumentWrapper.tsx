@@ -26,6 +26,7 @@ export default function DocumentWrapper(props: DocumentWrapperProps) {
         failedTests: failedRules.length,
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [passedRules, failedRules]);
 
   return (

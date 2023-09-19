@@ -1,4 +1,3 @@
-import { s } from "vitest/dist/reporters-cb94c88b";
 import { mutation, query } from "./_generated/server";
 import { v } from "convex/values";
 
