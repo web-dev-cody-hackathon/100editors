@@ -22,6 +22,14 @@ Prepare to embark on an unforgettable journey into the heart of language, where 
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
+## List of Members Who Contributed on This Project:
+- Jacob Jasper
+- Alexandre Pereira
+- Mario N. pereira
+- Aravind Shenoy
+- Jason Hugo
+- Katherine Lorenzo
+
 ## Getting Started
 
 First, run the development server:
