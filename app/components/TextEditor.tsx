@@ -109,7 +109,7 @@ function QuillEditor(props: EditorProps) {
   }, [setFailedRules, setIsCompleted, setPassedRules]);
 
   return (
-    <div className="flex flex-col relative min-w-[50vw] min-w-h-[70vh] h-full w-full mb-4 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
+    <div className="flex flex-col relative w-20 min-w-[50vw] min-w-h-[70vh] h-full mb-4 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600 break-words">
       <div className="relative h-full px-4 py-2 bg-white rounded-b-lg dark:bg-gray-800">
         <ReactQuill
           className="h-full w-full block px-0 text-sm text-gray-800 bg-white border-0 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 focus:ring-0 focus:ring-offset-0"
