@@ -46,7 +46,7 @@ export default function TextEditor(props: TextEditorProps) {
       yDoc.destroy();
       yProvider.destroy();
     };
-  }, []);
+  }, [slug]);
 
   // TODO proper error handling
   if (!text || !provider) {
@@ -104,7 +104,7 @@ function QuillEditor(props: EditorProps) {
       setPassedRules,
       setIsCompleted,
     });
-  }, []);
+  }, [setFailedRules, setIsCompleted, setPassedRules]);
 
   return (
     <div className="flex flex-col relative min-w-[50vw] h-[70vh] border-2">
