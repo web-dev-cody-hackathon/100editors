@@ -11,7 +11,8 @@
     "start:signal-server": "node node_modules/y-webrtc/bin/server.js",
     "lint": "next lint",
     "format": "prettier ./ --check .",
-    "test": "vitest"
+    "test": "vitest",
+    "format:fix": "npx prettier --write ."
   },
   "dependencies": {
     "@types/node": "20.5.9",
