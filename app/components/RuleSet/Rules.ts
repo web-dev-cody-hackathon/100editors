@@ -40,6 +40,50 @@ export const Rules: RuleStore = [
         .endsWith("the end".toLowerCase()),
   },
   {
+    name: "Continue the story-1",
+    desciption:
+      "Must continue the story after the starting text (add atleast 10 words)",
+    validation: (text: string) => {
+      const firstSentence = (text: string) => {
+        const firstSlice = text
+          .toLowerCase()
+          .slice(0, 100)
+          .replace(/\n$/, "")
+          .trim();
+        //  match the first sentence with fairy tale beginning and grab that sentence
+        const firstSentenceSlice = fairyTaleBeginnings.find((beginning) =>
+          firstSlice.startsWith(beginning.toLowerCase().trim())
+        );
+        return firstSentenceSlice ? firstSentenceSlice : "";
+      };
+
+      const lastSentence = (text: string) => {
+        const lastSlice = text
+          .toLowerCase()
+          .slice(-100)
+          .replace(/\n$/, "")
+          .trim();
+        //  match the last sentence with 'the end' and grab that sentence
+        const lastSentenceSlice = lastSlice.endsWith("the end")
+          ? "the end"
+          : "";
+        return lastSentenceSlice;
+      };
+
+      const firstSentenceIndex = text.indexOf(firstSentence(text));
+      const lastSentenceIndex = text.indexOf(lastSentence(text));
+
+      const textBetweenFirstAndLastSentence = text.slice(
+        firstSentenceIndex + firstSentence(text).length,
+        lastSentenceIndex
+      );
+
+      const words = textBetweenFirstAndLastSentence.match(/[^ ,\-\n]+/g);
+
+      return words ? words.length >= 10 : false;
+    },
+  },
+  {
     name: "Sentence count",
     description: "Must have at least 3 sentences (ending with . or ! or ?)",
     validation: (text: string) => {
@@ -178,12 +222,31 @@ export const Rules: RuleStore = [
     },
   },
   {
+    name: "Min 3 words per line",
+    desciption: "Must have atleast 3 words per line",
+    validation: (text: string) => {
+      const lines = text.split("\n");
+      return lines.every((line) => {
+        const words = line.match(/[^ ,\-\n]+/g);
+        return words ? words.length >= 3 : false;
+      });
+    },
+  },
+  {
     name: "Blank lines every 5",
     description: "Must have blank lines on every 5th line",
     validation: (text: string) => {
       const lines = text.split("\n");
       const every5thLine = lines.filter((line, i) => (i + 1) % 5 === 0);
       return every5thLine.every((line) => line === "");
+    },
+  },
+  {
+    name: "Must have less than 10 'and's",
+    desciption: "Must have less than 10 'and's",
+    validation: (text: string) => {
+      const ands = text.match(/and/gi);
+      return ands ? ands.length < 10 : false;
     },
   },
 ];
