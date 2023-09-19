@@ -70,7 +70,6 @@ export default function TextEditor(props: TextEditorProps) {
     setText(yText);
     setProvider(yProvider);
 
-
     return () => {
       yDoc.destroy();
       yProvider.destroy();
@@ -78,8 +77,6 @@ export default function TextEditor(props: TextEditorProps) {
     // don't add slug because it breaks things
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-
 
   // TODO proper error handling
   if (!text || !provider) {
