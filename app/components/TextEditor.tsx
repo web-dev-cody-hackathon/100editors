@@ -13,10 +13,13 @@ import { useEffect, useRef, useState } from "react";
 
 import type { ReactQuillProps } from "react-quill";
 
-import "react-quill/dist/quill.snow.css";
 import { validateText } from "./RuleSet/RuleValidation";
 import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
+
+import "./textEditor.css";
+import "react-quill/dist/quill.core.css";
+import { Sources } from "quill";
 
 interface TextEditorProps extends ReactQuillProps {
   slug: string;
@@ -35,11 +38,12 @@ export default function TextEditor(props: TextEditorProps) {
     const yText = yDoc.getText(slug);
 
     // default of 20 max connections
-    const yProvider: WebrtcProviderType = new WebrtcProvider(
-      "quill-demo-room",
-      yDoc,
-      { signaling: ["wss://webrtc-production-ed77.up.railway.app"] }
-    );
+    const yProvider: WebrtcProviderType = new WebrtcProvider(slug, yDoc, {
+      signaling: [
+        "wss://webrtc-production-ed77.up.railway.app",
+        // "ws://localhost:4444",
+      ],
+    });
 
     setText(yText);
     setProvider(yProvider);
@@ -48,6 +52,9 @@ export default function TextEditor(props: TextEditorProps) {
       yDoc.destroy();
       yProvider.destroy();
     };
+
+    // Do not add slug to dependency arr or it will break everything
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // TODO proper error handling
@@ -56,10 +63,9 @@ export default function TextEditor(props: TextEditorProps) {
   }
 
   return (
-    <div className="flex flex-col items-center align-items border-2">
-      <h3>Editor</h3>
+    <div className="flex flex-col items-center align-items">
       <QuillEditor
-        modules={{ toolbar: false }}
+        modules={{ toolbar: false, clipboard: false }}
         formats={[]}
         yText={text}
         provider={provider}
@@ -100,6 +106,14 @@ function QuillEditor(props: EditorProps) {
   }, [provider.awareness, yText]);
 
   useEffect(() => {
+    if (!reactQuillRef.current) {
+      return;
+    }
+
+    reactQuillRef.current.focus();
+  }, []);
+
+  useEffect(() => {
     validateText({
       text: "",
       rules: Rules,
@@ -107,14 +121,21 @@ function QuillEditor(props: EditorProps) {
       setPassedRules,
       setIsCompleted,
     });
+  }, [setFailedRules, setIsCompleted, setPassedRules]);
+
+  useEffect(() => {
+    if (!reactQuillRef.current) {
+      return;
+    }
+
+    reactQuillRef.current.focus();
   }, []);
 
   return (
-    <div className="flex flex-col relative min-w-[50vw] h-[70vh] border-2">
-      <div className="relative h-full">
+    <div className="flex flex-col relative w-20 min-w-[50vw] min-w-h-[70vh] h-full mb-4 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600 break-words">
+      <div className="relative h-full px-4 py-2 bg-white rounded-b-lg dark:bg-gray-800">
         <ReactQuill
-          className="h-full w-full"
-          placeholder="Start typing here…"
+          className="h-full w-full block px-0 text-sm text-gray-800 bg-white border-0 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 focus:ring-0 focus:ring-offset-0"
           ref={reactQuillRef}
           modules={{
             toolbar: false,
@@ -132,7 +153,12 @@ function QuillEditor(props: EditorProps) {
               userOnly: true,
             },
           }}
-          onChange={(value: string, delta: any, source: any, editor: any) => {
+          onChange={(
+            _value: string,
+            _delta: any,
+            _source: Sources,
+            editor: ReactQuill.UnprivilegedEditor
+          ) => {
             validateText({
               text: editor.getText(),
               rules: Rules,

@@ -7,7 +7,7 @@ import {
 
 export interface Rule {
   name: string;
-  desciption: string;
+  description: string;
   validation: (text: string) => boolean;
   completed?: boolean;
 }
@@ -17,7 +17,7 @@ interface RuleStore extends Array<Rule> {}
 export const Rules: RuleStore = [
   {
     name: "Starting text",
-    desciption:
+    description:
       'Must start with a fairy tale beginning like "Once upon a time", "In a land far far away" or "Long ago in a kingdom far far away"',
     validation: (text: string) => {
       const firstSentence = (text: string) =>
@@ -30,7 +30,7 @@ export const Rules: RuleStore = [
   },
   {
     name: "Ending text",
-    desciption: 'Must end with "The End"',
+    description: 'Must end with "The End"',
     validation: (text: string) =>
       text
         .toLowerCase()
@@ -41,7 +41,7 @@ export const Rules: RuleStore = [
   },
   {
     name: "Continue the story-1",
-    desciption:
+    description:
       "Must continue the story after the starting text (add atleast 10 words)",
     validation: (text: string) => {
       const firstSentence = (text: string) => {
@@ -85,7 +85,7 @@ export const Rules: RuleStore = [
   },
   {
     name: "Sentence count",
-    desciption: "Must have at least 3 sentences (ending with . or ! or ?)",
+    description: "Must have at least 3 sentences (ending with . or ! or ?)",
     validation: (text: string) => {
       const sentences = text.match(/[^\.!\?]+[\.!\?]+/g);
       return sentences ? sentences.length >= 3 : false;
@@ -93,7 +93,7 @@ export const Rules: RuleStore = [
   },
   {
     name: "Word in sentence count",
-    desciption:
+    description:
       "Must have at least 4 words in each sentence (separated by spaces, commas or dashes)",
     validation: (text: string) => {
       const sentences = text.match(/[^\.!\?]+[\.!\?]+/g);
@@ -108,7 +108,7 @@ export const Rules: RuleStore = [
   },
   {
     name: "Animal count",
-    desciption: "Must have at least 3 animals",
+    description: "Must have at least 3 animals",
     validation: (text: string) => {
       const cleanedText = text
         .toLowerCase()
@@ -123,14 +123,14 @@ export const Rules: RuleStore = [
   },
   {
     name: "add your lucky number",
-    desciption: "Must have your lucky number",
+    description: "Must have your lucky number",
     validation: (text: string) => {
       return /\d/.test(text);
     },
   },
   {
     name: "add your favourite colour",
-    desciption: "Must have your favourite colour",
+    description: "Must have your favourite colour",
     validation: (text: string) => {
       const cleanedText = text
         .toLowerCase()
@@ -145,7 +145,7 @@ export const Rules: RuleStore = [
   },
   {
     name: "Capitalize Ts",
-    desciption: "Must capitalize all Ts",
+    description: "Must capitalize all Ts",
     validation: (text: string): boolean => {
       const includesCapitalT = text.includes("T");
       const includesLowercaseTs = !text.includes("t");
@@ -155,7 +155,7 @@ export const Rules: RuleStore = [
   },
   {
     name: "month names",
-    desciption: "Must have a month name (January, February, etc)",
+    description: "Must have a month name (January, February, etc)",
     validation: (text: string) => {
       const cleanedText = text
         .toLowerCase()
@@ -170,7 +170,7 @@ export const Rules: RuleStore = [
   },
   {
     name: "Today's day of the week",
-    desciption: "Must have today's day of the week (Monday, Tuesday, etc)",
+    description: "Must have today's day of the week (Monday, Tuesday, etc)",
     validation: (text: string) => {
       // should match monday or mon
       const today = new Date();
@@ -185,7 +185,7 @@ export const Rules: RuleStore = [
   },
   {
     name: "Some sentences should start with 'the'",
-    desciption: "Must have atleast 3 sentences that start with 'the'",
+    description: "Must have atleast 3 sentences that start with 'the'",
     validation: (text: string) => {
       // split sentences based on . ! ? \n
       const theSentences = text
@@ -198,7 +198,7 @@ export const Rules: RuleStore = [
   },
   {
     name: "Sentences start with a capital letter",
-    desciption: "All sentences must start with a capital letter (A-Z)",
+    description: "All sentences must start with a capital letter (A-Z)",
     validation: (text: string) => {
       const sentences = text
         .split(/\.|\!|\?|\n/)
@@ -215,7 +215,7 @@ export const Rules: RuleStore = [
   },
   {
     name: "Must have 10 lines",
-    desciption: "Must have 10 lines",
+    description: "Must have 10 lines",
     validation: (text: string) => {
       const lines = text.split("\n");
       return lines.length >= 10;
@@ -223,7 +223,7 @@ export const Rules: RuleStore = [
   },
   {
     name: "Min 3 words per line",
-    desciption: "Must have atleast 3 words per line",
+    description: "Must have atleast 3 words per line",
     validation: (text: string) => {
       const lines = text.split("\n");
       return lines.every((line) => {
@@ -234,7 +234,7 @@ export const Rules: RuleStore = [
   },
   {
     name: "Blank lines every 5",
-    desciption: "Must have blank lines on every 5th line",
+    description: "Must have blank lines on every 5th line",
     validation: (text: string) => {
       const lines = text.split("\n");
       const every5thLine = lines.filter((line, i) => (i + 1) % 5 === 0);
@@ -243,7 +243,7 @@ export const Rules: RuleStore = [
   },
   {
     name: "Must have less than 10 'and's",
-    desciption: "Must have less than 10 'and's",
+    description: "Must have less than 10 'and's",
     validation: (text: string) => {
       const ands = text.match(/and/gi);
       return ands ? ands.length < 10 : false;
