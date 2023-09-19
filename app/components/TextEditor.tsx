@@ -34,11 +34,9 @@ export default function TextEditor(props: TextEditorProps) {
     const yText = yDoc.getText(slug);
 
     // default of 20 max connections
-    const yProvider: WebrtcProviderType = new WebrtcProvider(
-      "quill-demo-room",
-      yDoc,
-      { signaling: ["wss://webrtc-production-ed77.up.railway.app"] }
-    );
+    const yProvider: WebrtcProviderType = new WebrtcProvider(slug, yDoc, {
+      signaling: ["wss://webrtc-production-ed77.up.railway.app"],
+    });
 
     setText(yText);
     setProvider(yProvider);
@@ -95,6 +93,14 @@ function QuillEditor(props: EditorProps) {
       binding.destroy();
     };
   }, [provider.awareness, yText]);
+
+  useEffect(() => {
+    if (!reactQuillRef.current) {
+      return;
+    }
+
+    reactQuillRef.current.focus();
+  }, []);
 
   useEffect(() => {
     validateText({
