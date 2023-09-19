@@ -22,10 +22,19 @@ interface TextEditorProps extends ReactQuillProps {
   setPassedRules: React.Dispatch<React.SetStateAction<Rule[]>>;
   setFailedRules: React.Dispatch<React.SetStateAction<Rule[]>>;
   setIsCompleted: React.Dispatch<React.SetStateAction<boolean>>;
+  setUsersInRoom: React.Dispatch<React.SetStateAction<string[]>>;
+  usersInRoom: string[];
 }
 
 export default function TextEditor(props: TextEditorProps) {
-  const { setPassedRules, setFailedRules, setIsCompleted, slug } = props;
+  const {
+    setPassedRules,
+    setFailedRules,
+    setIsCompleted,
+    slug,
+    setUsersInRoom,
+    usersInRoom,
+  } = props;
   const [text, setText] = useState<Y.Text>();
   const [provider, setProvider] = useState<WebrtcProviderType>();
 
@@ -33,13 +42,34 @@ export default function TextEditor(props: TextEditorProps) {
     const yDoc = new Y.Doc();
     const yText = yDoc.getText(slug);
 
-    // default of 20 max connections
+    // default: ~20 max connections. Updated ~75 max connections
     const yProvider: WebrtcProviderType = new WebrtcProvider(slug, yDoc, {
       signaling: ["wss://webrtc-production-ed77.up.railway.app"],
+      maxConns: 75 + Math.floor(Math.random() * 15),
     });
+    // log when a user joins or leaves
+    yProvider.awareness.on(
+      "change",
+      ({
+        added,
+        updated,
+        removed,
+      }: {
+        added: string[];
+        updated: string[];
+        removed: string[];
+      }) => {
+        setUsersInRoom((prev) => {
+          const newUsers = new Set([...prev, ...added]);
+          removed.forEach((user) => newUsers.delete(user));
+          return Array.from(newUsers);
+        });
+      }
+    );
 
     setText(yText);
     setProvider(yProvider);
+
 
     return () => {
       yDoc.destroy();
@@ -49,6 +79,8 @@ export default function TextEditor(props: TextEditorProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+
+
   // TODO proper error handling
   if (!text || !provider) {
     return <h1>your code is broken</h1>;
@@ -56,6 +88,7 @@ export default function TextEditor(props: TextEditorProps) {
 
   return (
     <div className="flex flex-col items-center align-items">
+      <p className="text-center">Users in room: {usersInRoom.length}</p>
       <QuillEditor
         modules={{ toolbar: false }}
         formats={[]}
