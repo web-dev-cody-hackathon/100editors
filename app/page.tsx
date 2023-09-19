@@ -25,7 +25,7 @@ export default function Home() {
         </div>
       </div>
       <div className="overflow-hidden relative xl:w-1/3 2xl:w-1/2">
-        <Image src="/books.jpg" fill objectFit="cover" quality={50} alt="" />
+        <Image src="/books.jpg" fill objectFit="cover" quality={25} alt="" />
       </div>
     </main>
   );
