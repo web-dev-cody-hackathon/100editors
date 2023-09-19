@@ -109,8 +109,6 @@ function QuillEditor(props: EditorProps) {
           className="h-full w-full"
           placeholder="Start typing here…"
           ref={reactQuillRef}
-          // theme="snow"
-          // style={{ height: "100%" }}
           modules={{
             toolbar: false,
             history: {
