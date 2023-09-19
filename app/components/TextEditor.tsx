@@ -45,7 +45,10 @@ export default function TextEditor(props: TextEditorProps) {
       yDoc.destroy();
       yProvider.destroy();
     };
-  }, [slug]);
+
+    // Do not add slug to dependency arr or it will break everything
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // TODO proper error handling
   if (!text || !provider) {
