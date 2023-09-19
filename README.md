@@ -14,9 +14,9 @@ Welcome to the captivating world of 100Editors, a groundbreaking multiplayer puz
 
 🎉 **Victory or Defeat Together:** The beauty of 100Editors lies in its cooperative spirit, but the challenge is equally rewarding when taken solo. Win as a team, or face defeat together, or triumph as a lone grammar virtuoso—the choice is yours.
 
-🔐 **Incorporating the Password Game:** Drawing inspiration from the structure of the Password Game, we've transformed grammatical errors into the foundation of our gameplay. Just as you'd adhere to the Password Game's rules, you'll navigate 100Editors using similar principles, turning grammatical precision into an engaging puzzle-solving adventure.
+🔐 **Incorporating the Password Game:** Drawing inspiration from the structure of the Password Game, we've transformed grammatical errors into the foundation of our tool feautures. Just as you'd adhere to the Password Game's rules, you'll navigate 100Editors using similar principles, turning grammatical precision into an engaging puzzle-solving adventure.
 
-🚀 **A Hackathon Innovation:** "100Editors" is the brainchild of a two-week hackathon project sponsored by Convex and Web Dev Cody. This collaborative endeavor brings together a community of dedicated developers and grammar enthusiasts to deliver an innovative gaming experience.
+🚀 **A Hackathon Innovation:** "100Editors" is the brainchild of a two-week hackathon project sponsored by Convex and Web Dev Cody. This collaborative endeavor brings together a community of dedicated developers and grammar enthusiasts to deliver an innovative tool experience.
 
 Prepare to embark on an unforgettable journey into the heart of language, where victory is born from unity, wit, and a shared love for the art of grammar. 100Editors awaits, ready to challenge your linguistic mettle like never before. Are you up for the ultimate proofreader's challenge, alone or with a team?
 
