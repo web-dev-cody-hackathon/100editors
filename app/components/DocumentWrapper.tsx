@@ -15,7 +15,7 @@ export default function DocumentWrapper() {
         setFailedRules={setFailedRules}
         setIsCompleted={setIsCompleted}
       />
-      <RuleSet passedRules={passedRules} failedRules={failedRules}/>
+      <RuleSet passedRules={passedRules} failedRules={failedRules} />
     </div>
   );
 }
