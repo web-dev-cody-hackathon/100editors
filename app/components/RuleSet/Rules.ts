@@ -41,7 +41,7 @@ export const Rules: RuleStore = [
   },
   {
     name: "Continue the story-1",
-    desciption:
+    description:
       "Must continue the story after the starting text (add atleast 10 words)",
     validation: (text: string) => {
       const firstSentence = (text: string) => {
@@ -223,7 +223,7 @@ export const Rules: RuleStore = [
   },
   {
     name: "Min 3 words per line",
-    desciption: "Must have atleast 3 words per line",
+    description: "Must have atleast 3 words per line",
     validation: (text: string) => {
       const lines = text.split("\n");
       return lines.every((line) => {
@@ -243,7 +243,7 @@ export const Rules: RuleStore = [
   },
   {
     name: "Must have less than 10 'and's",
-    desciption: "Must have less than 10 'and's",
+    description: "Must have less than 10 'and's",
     validation: (text: string) => {
       const ands = text.match(/and/gi);
       return ands ? ands.length < 10 : false;
