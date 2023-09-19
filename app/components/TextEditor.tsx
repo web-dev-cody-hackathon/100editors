@@ -62,7 +62,7 @@ export default function TextEditor(props: TextEditorProps) {
   return (
     <div className="flex flex-col items-center align-items">
       <QuillEditor
-        modules={{ toolbar: false }}
+        modules={{ toolbar: false, clipboard: false }}
         formats={[]}
         yText={text}
         provider={provider}
