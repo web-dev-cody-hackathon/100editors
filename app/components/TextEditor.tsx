@@ -108,6 +108,14 @@ function QuillEditor(props: EditorProps) {
     });
   }, [setFailedRules, setIsCompleted, setPassedRules]);
 
+  useEffect(() => {
+    if (!reactQuillRef.current) {
+      return;
+    }
+
+    reactQuillRef.current.focus();
+  }, []);
+
   return (
     <div className="flex flex-col relative w-20 min-w-[50vw] min-w-h-[70vh] h-full mb-4 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600 break-words">
       <div className="relative h-full px-4 py-2 bg-white rounded-b-lg dark:bg-gray-800">
