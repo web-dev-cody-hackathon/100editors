@@ -14,19 +14,20 @@ import "react-quill/dist/quill.snow.css";
 import { validateText } from "./RuleSet/RuleValidation";
 
 interface TextEditorProps extends ReactQuillProps {
+  slug: string;
   setPassedRules: React.Dispatch<React.SetStateAction<Rule[]>>;
   setFailedRules: React.Dispatch<React.SetStateAction<Rule[]>>;
   setIsCompleted: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export default function TextEditor(props: TextEditorProps) {
-  const { setPassedRules, setFailedRules, setIsCompleted } = props;
+  const { setPassedRules, setFailedRules, setIsCompleted, slug } = props;
   const [text, setText] = useState<Y.Text>();
   const [provider, setProvider] = useState<WebrtcProviderType>();
 
   useEffect(() => {
     const yDoc = new Y.Doc();
-    const yText = yDoc.getText("quill");
+    const yText = yDoc.getText(slug);
 
     // default of 20 max connections
     const yProvider: WebrtcProviderType = new WebrtcProvider(
