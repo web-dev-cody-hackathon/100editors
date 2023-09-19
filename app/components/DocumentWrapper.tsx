@@ -11,20 +11,22 @@ interface DocumentWrapperProps {
   slugId: Id<"slugs"> | undefined;
 }
 export default function DocumentWrapper(props: DocumentWrapperProps) {
-  const mutateDbRules = useMutation(api.slugs.updateSlug);
+  const updateSlug = useMutation(api.slugs.updateSlug);
   const { slug, slugId } = props;
   
   const [passedRules, setPassedRules] = useState<Rule[]>([] as Rule[]);
   const [failedRules, setFailedRules] = useState<Rule[]>([] as Rule[]);
   const [isCompleted, setIsCompleted] = useState<boolean>(false);
 
-  // useEffect(() => {
-  //   mutateDbRules({
-  //     id: slug,
-  //     passedTests: passedRules.length,
-  //     failedTests: failedRules.length,
-  //   });
-  // }, [setFailedRules, setPassedRules]);
+  useEffect(() => {
+    if (slugId) {
+      updateSlug({
+        id: slugId,
+        passedTests: passedRules.length,
+        failedTests: failedRules.length,
+      });
+    }
+  }, [passedRules, failedRules]);
 
   return (
     <div className="flex justify-center content-center flex-row gap-5">
@@ -33,9 +35,6 @@ export default function DocumentWrapper(props: DocumentWrapperProps) {
         setPassedRules={setPassedRules}
         setFailedRules={setFailedRules}
         setIsCompleted={setIsCompleted}
-        passedRules={passedRules}
-        failedRules={failedRules}
-        slugId={slugId}
       />
       <RuleSet passedRules={passedRules} failedRules={failedRules} />
     </div>

@@ -17,16 +17,13 @@ import "react-quill/dist/quill.snow.css";
 import { validateText } from "./RuleSet/RuleValidation";
 import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
-import { Id } from "@/convex/_generated/dataModel";
+
 
 interface TextEditorProps extends ReactQuillProps {
   slug: string;
   setPassedRules: React.Dispatch<React.SetStateAction<Rule[]>>;
   setFailedRules: React.Dispatch<React.SetStateAction<Rule[]>>;
   setIsCompleted: React.Dispatch<React.SetStateAction<boolean>>;
-  slugId: Id<"slugs"> | undefined;
-  passedRules: Rule[];
-  failedRules: Rule[];
 }
 
 export default function TextEditor(props: TextEditorProps) {
@@ -35,9 +32,6 @@ export default function TextEditor(props: TextEditorProps) {
     setFailedRules,
     setIsCompleted,
     slug,
-    slugId,
-    passedRules,
-    failedRules,
   } = props;
   const [text, setText] = useState<Y.Text>();
   const [provider, setProvider] = useState<WebrtcProviderType>();
@@ -79,9 +73,6 @@ export default function TextEditor(props: TextEditorProps) {
         setFailedRules={setFailedRules}
         setPassedRules={setPassedRules}
         setIsCompleted={setIsCompleted}
-        slugId={slugId}
-        passedRules={passedRules}
-        failedRules={failedRules}
       />
     </div>
   );
@@ -93,9 +84,6 @@ type EditorProps = {
   setPassedRules: React.Dispatch<React.SetStateAction<Rule[]>>;
   setFailedRules: React.Dispatch<React.SetStateAction<Rule[]>>;
   setIsCompleted: React.Dispatch<React.SetStateAction<boolean>>;
-  slugId: Id<"slugs"> | undefined;
-  passedRules: Rule[];
-  failedRules: Rule[];
 };
 
 function QuillEditor(props: EditorProps) {
@@ -106,9 +94,6 @@ function QuillEditor(props: EditorProps) {
     setPassedRules,
     setFailedRules,
     setIsCompleted,
-    slugId,
-    passedRules,
-    failedRules,
   } = props;
   const reactQuillRef = useRef<ReactQuill>(null);
   // Set up Yjs and Quill
@@ -135,15 +120,7 @@ function QuillEditor(props: EditorProps) {
     });
   }, []);
 
-  useEffect(() => {
-    if (slugId) {
-      updateSlug({
-        id: slugId,
-        passedTests: passedRules.length,
-        failedTests: failedRules.length,
-      });
-    }
-  }, [passedRules, failedRules]);
+
 
   return (
     <div className="flex flex-col relative min-w-[50vw] h-[70vh] border-2">
