@@ -23,32 +23,13 @@ export default function Page(props: PageParams) {
 
   const createSlug = useMutation(api.slugs.createSlug);
   const [slugId, setSlugId] = useState<Id<"slugs"> | undefined>(undefined);
-  // const getSlug = useQuery(api.slugs.getSlug, { slug: slug });
 
   useEffect(() => {
     createSlugFn();
-    // createSlugUpsert({
-    //   getSlug: getSlug,
-
-    //   slug: slug,
-    // });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // async function createSlugUpsert({
-  //   getSlug,
-  //   slug,
-  // }: {
-  //   getSlug: null | undefined;
-  //   slug: string;
-  // }) {
-  //   if (!getSlug) {
-  //     console.log("creating slug", slug);
-  //     createSlugFn();
-  //   } else {
-  //     console.log("Joining existing Slug", slug);
-  //   }
-  // }
+
 
   async function createSlugFn() {
     const res = await createSlug({
