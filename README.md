@@ -1,4 +1,4 @@
-Introducing "100Editors: The Ultimate Proofreader's Challenge" 📚🎮
+Introducing "100Editors: The Ultimate Proofreading Tool" 📚🎮
 
 Welcome to the captivating world of 100Editors, a groundbreaking multiplayer puzzle browser game where linguistic prowess meets collaborative strategy. In 100Editors, players embark on an exhilarating journey through the intricacies of grammar, syntax, and language precision.
 
