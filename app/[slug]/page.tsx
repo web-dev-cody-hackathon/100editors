@@ -17,7 +17,7 @@ export default function Page(props: PageParams) {
   const { params } = props;
 
   return (
-    <main className="flex min-h-screen flex-col items-center p-24">
+    <main className="flex flex-col items-center pt-4">
       <h1 className="mb-6 text-3xl">100Editors</h1>
       <h3 className="mb-6 text-2xl">
         {params.slug ? `Room: ${params.slug}` : ""}

@@ -13,8 +13,9 @@ import { useEffect, useRef, useState } from "react";
 
 import type { ReactQuillProps } from "react-quill";
 
-import "react-quill/dist/quill.snow.css";
 import { validateText } from "./RuleSet/RuleValidation";
+
+import "./textEditor.css";
 
 interface TextEditorProps extends ReactQuillProps {
   slug: string;
@@ -54,8 +55,7 @@ export default function TextEditor(props: TextEditorProps) {
   }
 
   return (
-    <div className="flex flex-col items-center align-items border-2">
-      <h3>Editor</h3>
+    <div className="flex flex-col items-center align-items">
       <QuillEditor
         modules={{ toolbar: false }}
         formats={[]}
@@ -107,10 +107,10 @@ function QuillEditor(props: EditorProps) {
   }, [setFailedRules, setIsCompleted, setPassedRules]);
 
   return (
-    <div className="flex flex-col relative min-w-[50vw] h-[70vh] border-2">
-      <div className="relative h-full">
+    <div className="flex flex-col relative min-w-[50vw] min-w-h-[70vh] h-full w-full mb-4 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
+      <div className="relative h-full px-4 py-2 bg-white rounded-b-lg dark:bg-gray-800">
         <ReactQuill
-          className="h-full w-full"
+          className="h-full w-full block px-0 text-sm text-gray-800 bg-white border-0 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 focus:ring-0 focus:ring-offset-0"
           placeholder="Start typing here…"
           ref={reactQuillRef}
           modules={{
@@ -129,7 +129,12 @@ function QuillEditor(props: EditorProps) {
               userOnly: true,
             },
           }}
-          onChange={(value: string, delta: any, source: any, editor: any) => {
+          onChange={(
+            _value: string,
+            _delta: any,
+            _source: any,
+            editor: any
+          ) => {
             validateText({
               text: editor.getText(),
               rules: Rules,
