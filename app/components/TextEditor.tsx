@@ -1,4 +1,7 @@
-import ReactQuill from "react-quill";
+import ReactQuill, { Quill } from "react-quill";
+import QuillCursors from "quill-cursors";
+Quill.register("modules/cursors", QuillCursors);
+
 import * as Y from "yjs";
 import { QuillBinding } from "y-quill";
 // @ts-ignore types aren't exported correctly. They are taken directly from a copy of the type file below
@@ -88,7 +91,7 @@ function QuillEditor(props: EditorProps) {
     const binding = new QuillBinding(yText, quill, provider.awareness);
 
     return () => {
-      binding?.destroy?.();
+      binding.destroy();
     };
   }, [provider.awareness, yText]);
 
@@ -111,6 +114,15 @@ function QuillEditor(props: EditorProps) {
           ref={reactQuillRef}
           modules={{
             toolbar: false,
+            cursors: {
+              cursors: {
+                template: '<div class="custom-cursor">...</div>',
+                hideDelayMs: 5000,
+                hideSpeedMs: 500,
+                selectionChangeSource: null,
+                transformOnTextChange: true,
+              },
+            },
             history: {
               // Local undo shouldn't undo changes from remote users
               userOnly: true,
