@@ -46,6 +46,7 @@ export default function TextEditor(props: TextEditorProps) {
       yDoc.destroy();
       yProvider.destroy();
     };
+    
   }, []);
 
   // TODO proper error handling

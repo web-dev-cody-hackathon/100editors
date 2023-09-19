@@ -1,12 +1,16 @@
+import { s } from "vitest/dist/reporters-cb94c88b";
 import { mutation, query } from "./_generated/server";
 import { v } from "convex/values";
 
 export const getSlug = query({
   args: {
-    slugId: v.id("slugs"),
+    slug: v.string(),
   },
   handler: async (ctx, args) => {
-    const slug = await ctx.db.get(args.slugId);
+    const slug = await ctx.db
+      .query("slugs")
+      .filter((s) => s.eq(s.field("slug"), args.slug))
+      .first();
     console.log("getSlug", slug);
   },
 });
@@ -24,12 +28,24 @@ export const createSlug = mutation({
     // startTime: v.string(),
   },
   handler: async (ctx, args) => {
-    const slugId = await ctx.db.insert("slugs", {
-      slug: args.slug,
-      // startTime: args.startTime,
-    });
-
-    return slugId;
+    const existingSlug = await ctx.db
+      .query("slugs")
+      .filter((s) => s.eq(s.field("slug"), args.slug))
+      .first();
+    if (existingSlug) {
+      console.log("slug already exists");
+      const slugId = await ctx.db.replace(existingSlug._id, {
+        slug: args.slug,
+        // startTime: args.startTime,
+      });
+      return slugId;
+    } else {
+      const slugId = await ctx.db.insert("slugs", {
+        slug: args.slug,
+        // startTime: args.startTime,
+      });
+      return slugId;
+    }
   },
 });
 
