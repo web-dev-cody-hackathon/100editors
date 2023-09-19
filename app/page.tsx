@@ -1,9 +1,14 @@
 "use client";
 
+import { useQuery } from "convex/react";
 import LinkGenerator from "./components/LinkGenerator";
 import Image from "next/image";
+import { api } from "@/convex/_generated/api";
+import LeaderBoard from "./components/LeaderBoard/LeaderBoard";
 
 export default function Home() {
+  const allSlugs = useQuery(api.slugs.getAllSlugs);
+  
   return (
     <main className="flex">
       <div className="flex min-h-screen flex-col  justify-center p-3 pt-5 sm:w-2/3 md:w-1/2 lg:w-1/3 m-auto">
@@ -25,7 +30,9 @@ export default function Home() {
         </div>
       </div>
       <div className="overflow-hidden relative xl:w-1/3 2xl:w-1/2">
-        <Image src="/books.jpg" fill objectFit="cover" quality={5} alt="" />
+        {/* <Image src="/books.jpg" fill objectFit="cover" quality={5} alt="" /> */}
+        <h2>score</h2>
+        <LeaderBoard allSlugs={allSlugs} />
       </div>
     </main>
   );

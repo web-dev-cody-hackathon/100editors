@@ -71,6 +71,7 @@ export default function TextEditor(props: TextEditorProps) {
 }
 
 type EditorProps = {
+
   yText: Y.Text;
   provider: WebrtcProviderType;
   setPassedRules: React.Dispatch<React.SetStateAction<Rule[]>>;
@@ -79,6 +80,7 @@ type EditorProps = {
 };
 
 function QuillEditor(props: EditorProps) {
+  
   const { yText, provider, setPassedRules, setFailedRules, setIsCompleted } =
     props;
   const reactQuillRef = useRef<ReactQuill>(null);
@@ -104,7 +106,10 @@ function QuillEditor(props: EditorProps) {
       setPassedRules,
       setIsCompleted,
     });
+
   }, []);
+
+
 
   return (
     <div className="flex flex-col relative min-w-[50vw] h-[70vh] border-2">
