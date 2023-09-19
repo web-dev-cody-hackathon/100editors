@@ -85,7 +85,7 @@ export default function TextEditor(props: TextEditorProps) {
 
   return (
     <div className="flex flex-col items-center align-items">
-      <p className="text-center">Users in room: {usersInRoom.length}</p>
+      <p className="text-center">Users in room: {usersInRoom.length + 1}</p>
       <QuillEditor
         modules={{ toolbar: false }}
         formats={[]}
