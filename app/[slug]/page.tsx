@@ -29,8 +29,6 @@ export default function Page(props: PageParams) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-
-
   async function createSlugFn() {
     const res = await createSlug({
       slug: slug,

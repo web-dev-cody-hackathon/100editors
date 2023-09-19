@@ -13,7 +13,7 @@ interface DocumentWrapperProps {
 export default function DocumentWrapper(props: DocumentWrapperProps) {
   const updateSlug = useMutation(api.slugs.updateSlug);
   const { slug, slugId } = props;
-  
+
   const [passedRules, setPassedRules] = useState<Rule[]>([] as Rule[]);
   const [failedRules, setFailedRules] = useState<Rule[]>([] as Rule[]);
   const [isCompleted, setIsCompleted] = useState<boolean>(false);

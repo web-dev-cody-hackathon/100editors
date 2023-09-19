@@ -18,7 +18,6 @@ import { validateText } from "./RuleSet/RuleValidation";
 import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 
-
 interface TextEditorProps extends ReactQuillProps {
   slug: string;
   setPassedRules: React.Dispatch<React.SetStateAction<Rule[]>>;
@@ -27,12 +26,7 @@ interface TextEditorProps extends ReactQuillProps {
 }
 
 export default function TextEditor(props: TextEditorProps) {
-  const {
-    setPassedRules,
-    setFailedRules,
-    setIsCompleted,
-    slug,
-  } = props;
+  const { setPassedRules, setFailedRules, setIsCompleted, slug } = props;
   const [text, setText] = useState<Y.Text>();
   const [provider, setProvider] = useState<WebrtcProviderType>();
 
@@ -88,13 +82,8 @@ type EditorProps = {
 
 function QuillEditor(props: EditorProps) {
   const updateSlug = useMutation(api.slugs.updateSlug);
-  const {
-    yText,
-    provider,
-    setPassedRules,
-    setFailedRules,
-    setIsCompleted,
-  } = props;
+  const { yText, provider, setPassedRules, setFailedRules, setIsCompleted } =
+    props;
   const reactQuillRef = useRef<ReactQuill>(null);
   // Set up Yjs and Quill
   useEffect(() => {
@@ -119,8 +108,6 @@ function QuillEditor(props: EditorProps) {
       setIsCompleted,
     });
   }, []);
-
-
 
   return (
     <div className="flex flex-col relative min-w-[50vw] h-[70vh] border-2">
