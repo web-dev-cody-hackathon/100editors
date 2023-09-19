@@ -50,7 +50,7 @@ export default function TextEditor(props: TextEditorProps) {
   }
 
   return (
-    <div className="flex flex-col items-center align-items">
+    <div className="flex flex-col items-center align-items border-2">
       <h3>Editor</h3>
       <QuillEditor
         modules={{ toolbar: false }}
@@ -103,7 +103,7 @@ function QuillEditor(props: EditorProps) {
   }, []);
 
   return (
-    <div className="flex flex-col relative min-w-[50vw] min-h-[60vh] border-2">
+    <div className="flex flex-col relative min-w-[50vw] h-[70vh] border-2">
       <div className="relative h-full">
         <ReactQuill
           className="h-full w-full"
