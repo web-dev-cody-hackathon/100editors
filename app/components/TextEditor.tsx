@@ -16,6 +16,7 @@ import type { ReactQuillProps } from "react-quill";
 import { validateText } from "./RuleSet/RuleValidation";
 
 import "./textEditor.css";
+import "react-quill/dist/quill.core.css";
 import { Sources } from "quill";
 
 interface TextEditorProps extends ReactQuillProps {
@@ -132,7 +133,6 @@ function QuillEditor(props: EditorProps) {
       <div className="relative h-full px-4 py-2 bg-white rounded-b-lg dark:bg-gray-800">
         <ReactQuill
           className="h-full w-full block px-0 text-sm text-gray-800 bg-white border-0 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 focus:ring-0 focus:ring-offset-0"
-          placeholder="Start typing here…"
           ref={reactQuillRef}
           modules={{
             toolbar: false,
