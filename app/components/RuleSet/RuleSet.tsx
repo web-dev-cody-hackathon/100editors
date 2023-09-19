@@ -12,13 +12,10 @@ export default function RuleSet(props: RuleSetProps) {
   return (
     <div className="flex flex-col items-center align-items h-[76vh] border-2 border-gray-300 rounded-md">
       <h3>
-        Rules (Passed: {passedRules.length} of{" "}
-        {passedRules.length + failedRules.length})
+        Rules (Passed: {passedRules.length} of {passedRules.length + failedRules.length})
       </h3>
       <div
-        className=" min-w-[20vw] p-6 min-h-[60vh] max-w-[20vw]
-      overflow-y-auto scrollbar scrollbar-thumb-gray-900 scrollbar-track-gray-100
-      "
+        className="min-w-[20vw] p-6 min-h-[60vh] max-w-[20vw] overflow-y-auto scrollbar scrollbar-thumb-gray-900 scrollbar-track-gray-100"
       >
         {failedRules.map((rule) => {
           return (

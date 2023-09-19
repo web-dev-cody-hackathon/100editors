@@ -12,7 +12,6 @@ export interface Rule {
   completed?: boolean;
 }
 
-// Rules is an array of objects that are rules
 interface RuleStore extends Array<Rule> {}
 
 export const Rules: RuleStore = [
@@ -32,7 +31,6 @@ export const Rules: RuleStore = [
   {
     name: "Ending text",
     desciption: 'Must end with "The End"',
-    // ignore the line break at the end of the text
     validation: (text: string) =>
       text
         .toLowerCase()
@@ -105,8 +103,6 @@ export const Rules: RuleStore = [
     name: "Capitalize Ts",
     desciption: "Must capitalize all Ts",
     validation: (text: string): boolean => {
-      // should not contain capital T but should contain lowercase t for every occurance of t
-
       const includesCapitalT = text.includes("T");
       const includesLowercaseTs = !text.includes("t");
 
@@ -153,8 +149,6 @@ export const Rules: RuleStore = [
         .map((sentence) => sentence.trim())
         .filter((sentence) => sentence.toLowerCase().startsWith("the "));
 
-      // only keep sentences that start with the
-
       return theSentences.length >= 3;
     },
   },
@@ -187,7 +181,6 @@ export const Rules: RuleStore = [
     name: "Blank lines every 5",
     desciption: "Must have blank lines on every 5th line",
     validation: (text: string) => {
-      // after every 5th line there should be 2 or more line breaks
       const lines = text.split("\n");
       const every5thLine = lines.filter((line, i) => (i + 1) % 5 === 0);
       return every5thLine.every((line) => line === "");

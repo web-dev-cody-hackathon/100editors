@@ -1,5 +1,3 @@
-// create a function that takes in some text, and an object of rules Rule and returns an array of Rule names that the text fails or pass
-
 import { Rule } from "./Rules";
 
 interface ValidateTextProps {
