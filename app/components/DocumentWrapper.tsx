@@ -11,9 +11,9 @@ interface DocumentWrapperProps {
   slugId: Id<"slugs"> | undefined;
 }
 export default function DocumentWrapper(props: DocumentWrapperProps) {
-  // const getSlugId = useQuery(api.slugs.getSlug);
   const mutateDbRules = useMutation(api.slugs.updateSlug);
   const { slug, slugId } = props;
+  
   const [passedRules, setPassedRules] = useState<Rule[]>([] as Rule[]);
   const [failedRules, setFailedRules] = useState<Rule[]>([] as Rule[]);
   const [isCompleted, setIsCompleted] = useState<boolean>(false);
@@ -33,6 +33,9 @@ export default function DocumentWrapper(props: DocumentWrapperProps) {
         setPassedRules={setPassedRules}
         setFailedRules={setFailedRules}
         setIsCompleted={setIsCompleted}
+        passedRules={passedRules}
+        failedRules={failedRules}
+        slugId={slugId}
       />
       <RuleSet passedRules={passedRules} failedRules={failedRules} />
     </div>
