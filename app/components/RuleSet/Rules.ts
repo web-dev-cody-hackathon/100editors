@@ -165,6 +165,15 @@ export const Rules: RuleStore = [
     },
   },
   {
+    name: "Blank lines every 5",
+    description: "Every 5th line must be blank",
+    validation: (text: string) => {
+      const lines = text.split("\n");
+      const every5thLine = lines.filter((line, i) => (i + 1) % 5 === 0);
+      return every5thLine.every((line) => line === "");
+    },
+  },
+  {
     name: "month names",
     description: "Must have a month name (January, February, etc)",
     validation: (text: string) => {
@@ -254,15 +263,6 @@ export const Rules: RuleStore = [
         const words = line.split(" ");
         return words ? words.length >= 3 : false;
       });
-    },
-  },
-  {
-    name: "Blank lines every 5",
-    description: "Every 5th line must be blank",
-    validation: (text: string) => {
-      const lines = text.split("\n");
-      const every5thLine = lines.filter((line, i) => (i + 1) % 5 === 0);
-      return every5thLine.every((line) => line === "");
     },
   },
 ];
