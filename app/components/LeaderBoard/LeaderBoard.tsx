@@ -15,18 +15,19 @@ export default function LeaderBoard(props: LeaderBoardProps) {
   const { allSlugs } = props;
   return (
     <div>
-      <h2>Leaderboard</h2>
-
+      <h2 className="pb-5 text-2xl text-left">Leaderboard</h2>
+      <div className="border-b-orange-50">
       {allSlugs?.map((slug) => {
         return (
-          <div key={slug._id} className="flex flex-row gap-5">
-            <p>Room: {slug.slug}</p>
+          <div key={slug._id} className="flex flex-row gap-3">
+            <p className="grow">Room: {slug.slug}</p>
             <p>Passed: {slug.passedTests}</p>
             <p>Failed: {slug.failedTests}</p>
             <p>Time: x seconds</p>
           </div>
         );
       })}
+      </div>
     </div>
   );
 }
