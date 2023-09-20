@@ -202,12 +202,13 @@ export const Rules: RuleStore = [
   },
   {
     name: "digits should add up to 42",
-    description: "Digits should add up to 42",
+    description: "Digits should add up to 42 (check the console for the sum)",
     validation: (text: string) => {
       const sum = getMatches(text, digits)
         .map(digitStringToNumber)
         .reduce((acc, val) => acc + val, 0);
 
+      console.log(sum);
       return sum === 42;
     },
   },

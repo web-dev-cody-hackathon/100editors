@@ -334,6 +334,7 @@ export const digitsText = [
 export const digits = [...digitsNumerals, ...digitsText];
 
 export const digitStringToNumber = (digit: string): number => {
+  const lowerCase = digit.toLowerCase();
   const digitMap = {
     zero: 0,
     one: 1,
@@ -358,7 +359,7 @@ export const digitStringToNumber = (digit: string): number => {
   };
 
   // @ts-ignore
-  return digitMap[digit] ?? 0;
+  return digitMap[lowerCase] ?? 0;
 };
 
 export const digitToWordMap = {
