@@ -30,7 +30,7 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="flex flex-col h-full p-5 grow border border-red-300 rounded-2xl">
+        <div className="flex flex-col h-full p-5 grow rounded-2xl">
           <LeaderBoard allSlugs={allSlugs} />
         </div>
       </div>
