@@ -6,8 +6,6 @@ import { useMutation, useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { useEffect, useState } from "react";
 import { Id } from "@/convex/_generated/dataModel";
-import TimerLoading from "../components/Timer/TimerLoading";
-import { get } from "http";
 
 // we must disable SSR since ReactQuill attempts to access the `document`
 const DocumentWrapper = dynamic(() => import("../components/DocumentWrapper"), {
