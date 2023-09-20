@@ -10,8 +10,9 @@ export default function Home() {
   const allSlugs = useQuery(api.slugs.getAllSlugs);
 
   return (
-    <main className="flex">
-      <div className="flex min-h-screen flex-col  justify-center p-3 pt-5 sm:w-2/3 md:w-1/2 lg:w-1/3 m-auto">
+    <main className="flex justify-center items-center min-h-screen">
+      <div className="flex justify-between m-auto items-center">
+        <div className="flex-col justify-center p-5">
         <h1 className="pb-10 text-3xl text-left">100Editors</h1>
         <div className="flex justify-center content-center flex-col gap-5 w-full">
           <p>
@@ -29,10 +30,10 @@ export default function Home() {
           </footer>
         </div>
       </div>
-      <div className="overflow-hidden relative xl:w-1/3 2xl:w-1/2">
-        {/* <Image src="/books.jpg" fill objectFit="cover" quality={5} alt="" /> */}
 
-        <LeaderBoard allSlugs={allSlugs} />
+        <div className="flex flex-col h-full p-5 grow border border-red-300 rounded-2xl">
+          <LeaderBoard allSlugs={allSlugs} />
+        </div>
       </div>
     </main>
   );
