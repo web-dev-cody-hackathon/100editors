@@ -27,7 +27,7 @@ export default function LeaderBoard(props: LeaderBoardProps) {
         <div className={classes.tableHeader}>
           <p>Room</p>
           <p>Passed Tests </p>
-          <p>Time Elaplsed</p>
+          <p>Time Elapsed</p>
           <p>Completed</p>
         </div>
         <div>
