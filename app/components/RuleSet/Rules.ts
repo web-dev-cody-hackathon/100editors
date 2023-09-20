@@ -265,12 +265,4 @@ export const Rules: RuleStore = [
       return every5thLine.every((line) => line === "");
     },
   },
-  {
-    name: "Must have less than 10 'and's",
-    description: "Must have less than 10 'and's",
-    validation: (text: string) => {
-      const ands = text.match(/and/gi);
-      return ands ? ands.length < 10 : false;
-    },
-  },
 ];
