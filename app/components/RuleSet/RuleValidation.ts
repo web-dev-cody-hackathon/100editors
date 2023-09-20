@@ -6,10 +6,12 @@ interface ValidateTextProps {
   setFailedRules: React.Dispatch<React.SetStateAction<Rule[]>>;
   setPassedRules: React.Dispatch<React.SetStateAction<Rule[]>>;
   setIsCompleted: React.Dispatch<React.SetStateAction<boolean>>;
+  slug: string;
 }
 
 export const validateText = (props: ValidateTextProps) => {
-  const { text, rules, setFailedRules, setPassedRules, setIsCompleted } = props;
+  const { text, rules, setFailedRules, setPassedRules, setIsCompleted, slug } =
+    props;
 
   const failedRules: Rule[] = [];
   const passedRules: Rule[] = [];
@@ -24,7 +26,7 @@ export const validateText = (props: ValidateTextProps) => {
       }
 
       const rule = rules[i];
-      if (!rule.validation(text)) {
+      if (!rule.validation(text, slug)) {
         rule.completed = false;
         failedRules.push(rule);
       } else {

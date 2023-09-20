@@ -304,3 +304,80 @@ export const monthsNames = [
   "Dec",
   "Sept",
 ];
+
+export const digitsNumerals = [
+  "0",
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+  "9",
+];
+
+export const digitsText = [
+  "zero",
+  "one",
+  "two",
+  "three",
+  "four",
+  "five",
+  "six",
+  "seven",
+  "eight",
+  "nine",
+];
+
+export const digits = [...digitsNumerals, ...digitsText];
+
+export const digitStringToNumber = (digit: string): number => {
+  const lowerCase = digit.toLowerCase();
+  const digitMap = {
+    zero: 0,
+    one: 1,
+    two: 2,
+    three: 3,
+    four: 4,
+    five: 5,
+    six: 6,
+    seven: 7,
+    eight: 8,
+    nine: 9,
+    0: 0,
+    1: 1,
+    2: 2,
+    3: 3,
+    4: 4,
+    5: 5,
+    6: 6,
+    7: 7,
+    8: 8,
+    9: 9,
+  };
+
+  // @ts-ignore
+  return digitMap[lowerCase] ?? 0;
+};
+
+export const digitToWordMap = {
+  "0": "zero",
+  "1": "one",
+  "2": "two",
+  "3": "three",
+  "4": "four",
+  "5": "five",
+  "6": "six",
+  "7": "seven",
+  "8": "eight",
+  "9": "nine",
+};
+
+export const replaceNumeralsWithText = (x: string): string => {
+  return x.replace(/[0-9]/g, (digit) => {
+    // @ts-ignore
+    return digitToWordMap[digit];
+  });
+};

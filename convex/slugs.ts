@@ -10,6 +10,7 @@ export const getSlug = query({
       .query("slugs")
       .filter((s) => s.eq(s.field("slug"), args.slug))
       .first();
+
     return slug;
   },
 });

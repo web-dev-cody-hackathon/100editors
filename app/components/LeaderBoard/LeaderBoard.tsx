@@ -4,6 +4,8 @@ import { timeElapsed } from "../Timer/utils";
 
 import classes from "./LeaderBoard.module.css";
 
+import classes from "./LeaderBoard.module.css";
+
 interface LeaderBoardProps {
   allSlugs:
     | {

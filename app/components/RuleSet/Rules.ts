@@ -1,14 +1,20 @@
 import {
   animals,
   colorNames,
+  digitStringToNumber,
+  digits,
+  digitsNumerals,
+  digitsText,
   fairyTaleBeginnings,
   monthsNames,
+  replaceNumeralsWithText,
 } from "./ValidationLists";
+import getMatches from "./getMatches";
 
 export interface Rule {
   name: string;
   description: string;
-  validation: (text: string) => boolean;
+  validation: (text: string, slug?: string) => boolean;
   completed?: boolean;
 }
 
@@ -41,8 +47,7 @@ export const Rules: RuleStore = [
   },
   {
     name: "Continue the story-1",
-    description:
-      "Must continue the story after the starting text (add at least 10 words)",
+    description: "There's not enough words here. Add some more",
     validation: (text: string) => {
       const firstSentence = (text: string) => {
         const firstSlice = text
@@ -106,6 +111,13 @@ export const Rules: RuleStore = [
     },
   },
   {
+    name: "Must contain the room code",
+    description: "Must contain the room code",
+    validation: (text: string, slug = "") => {
+      return getMatches(text, [slug, replaceNumeralsWithText(slug)]).length > 0;
+    },
+  },
+  {
     name: "Animal count",
     description: "Must have at least 3 animals",
     validation: (text: string) => {
@@ -124,7 +136,7 @@ export const Rules: RuleStore = [
     name: "add your lucky number",
     description: "Must have your lucky number",
     validation: (text: string) => {
-      return /\d/.test(text);
+      return getMatches(text, digits).length > 0;
     },
   },
   {
@@ -153,6 +165,15 @@ export const Rules: RuleStore = [
     },
   },
   {
+    name: "Blank lines every 5",
+    description: "Every 5th line must be blank",
+    validation: (text: string) => {
+      const lines = text.split("\n");
+      const every5thLine = lines.filter((line, i) => (i + 1) % 5 === 0);
+      return every5thLine.every((line) => line === "");
+    },
+  },
+  {
     name: "month names",
     description: "Must have a month name (January, February, etc)",
     validation: (text: string) => {
@@ -169,12 +190,18 @@ export const Rules: RuleStore = [
   },
   {
     name: "Today's day of the week",
-    description: "Must have today's day of the week (Monday, Tuesday, etc)",
+    description: "Must have today's day of the week in Toronto",
     validation: (text: string) => {
       // should match monday or mon
       const today = new Date();
-      const day = today.toLocaleString("default", { weekday: "long" });
-      const dayShort = today.toLocaleString("default", { weekday: "short" });
+      const day = today.toLocaleString("default", {
+        weekday: "long",
+        timeZone: "America/New_York",
+      });
+      const dayShort = today.toLocaleString("default", {
+        weekday: "short",
+        timeZone: "America/New_York",
+      });
 
       return (
         text.toLowerCase().includes(day.toLowerCase()) ||
@@ -183,16 +210,15 @@ export const Rules: RuleStore = [
     },
   },
   {
-    name: "Some sentences should start with 'the'",
-    description: "Must have atleast 3 sentences that start with 'the'",
+    name: "digits should add up to 42",
+    description: "Digits should add up to 42 (check the console for the sum)",
     validation: (text: string) => {
-      // split sentences based on . ! ? \n
-      const theSentences = text
-        .split(/\.|\!|\?|\n/)
-        .map((sentence) => sentence.trim())
-        .filter((sentence) => sentence.toLowerCase().startsWith("the "));
+      const sum = getMatches(text, digits)
+        .map(digitStringToNumber)
+        .reduce((acc, val) => acc + val, 0);
 
-      return theSentences.length >= 3;
+      console.log(sum);
+      return sum === 42;
     },
   },
   {
@@ -213,11 +239,19 @@ export const Rules: RuleStore = [
     },
   },
   {
-    name: "Must have 10 lines",
+    name: "Must have at least 10 lines",
     description: "Must have at least 10 lines",
     validation: (text: string) => {
       const lines = text.split("\n");
       return lines.length >= 10;
+    },
+  },
+  {
+    name: "Must spell out digits",
+    description:
+      "We hear it's trendy to spell out each digit. Replace each numeral with it's longer counterpart",
+    validation: (text: string) => {
+      return getMatches(text, digitsNumerals).length === 0;
     },
   },
   {
@@ -229,23 +263,6 @@ export const Rules: RuleStore = [
         const words = line.split(" ");
         return words ? words.length >= 3 : false;
       });
-    },
-  },
-  {
-    name: "Blank lines every 5",
-    description: "Every 5th line must be blank",
-    validation: (text: string) => {
-      const lines = text.split("\n");
-      const every5thLine = lines.filter((line, i) => (i + 1) % 5 === 0);
-      return every5thLine.every((line) => line === "");
-    },
-  },
-  {
-    name: "Must have less than 10 'and's",
-    description: "Must have less than 10 'and's",
-    validation: (text: string) => {
-      const ands = text.match(/and/gi);
-      return ands ? ands.length < 10 : false;
     },
   },
 ];
