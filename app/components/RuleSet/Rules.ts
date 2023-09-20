@@ -168,12 +168,18 @@ export const Rules: RuleStore = [
   },
   {
     name: "Today's day of the week",
-    description: "Must have today's day of the week (Monday, Tuesday, etc)",
+    description: "Must have today's day of the week in Toronto",
     validation: (text: string) => {
       // should match monday or mon
       const today = new Date();
-      const day = today.toLocaleString("default", { weekday: "long" });
-      const dayShort = today.toLocaleString("default", { weekday: "short" });
+      const day = today.toLocaleString("default", {
+        weekday: "long",
+        timeZone: "America/New_York",
+      });
+      const dayShort = today.toLocaleString("default", {
+        weekday: "short",
+        timeZone: "America/New_York",
+      });
 
       return (
         text.toLowerCase().includes(day.toLowerCase()) ||
