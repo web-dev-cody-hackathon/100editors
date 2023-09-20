@@ -19,9 +19,5 @@ export default function Timer({ start }: TimerProps) {
     return () => clearTimeout(id);
   }, [start]);
 
-  return (
-    <span className="text-3xl">
-      Time Elapsed: <span className="countdown font-mono">{time}</span>
-    </span>
-  );
+  return <>{time}</>;
 }

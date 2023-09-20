@@ -43,3 +43,17 @@ const formatTimestamp = ({ seconds, minutes, hours }: Time): string => {
 export const createTimeStamp = (start: number, end: number) => {
   return formatTimestamp(millisecondsToTime(end - start));
 };
+
+/**
+ *
+ * @param start milliseconds since since midnight, January 1, 1970 (UTC)
+ * @param end milliseconds since since midnight, January 1, 1970 (UTC)
+ * @returns Time difference between the start and end time. The output format is '30s' or '3m 30s' or '3h 30m 30s' or '3h 30m'
+ */
+export const timeElapsed = ({ start, end }: { start: number; end: number }) => {
+  const time = millisecondsToTime(end - start);
+  const { seconds, minutes, hours } = time;
+  if (hours > 0) return `${hours}h ${minutes}m`;
+  if (minutes > 0) return `${minutes}m ${seconds}s`;
+  return `${seconds}s`;
+};

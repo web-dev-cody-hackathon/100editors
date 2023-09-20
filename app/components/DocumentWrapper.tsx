@@ -27,6 +27,7 @@ export default function DocumentWrapper(props: DocumentWrapperProps) {
         id: slugId,
         passedTests: passedRules.length,
         failedTests: failedRules.length,
+        endTime: isCompleted ? Date.now() : undefined,
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
