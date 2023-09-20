@@ -24,6 +24,9 @@ export default function Page(props: PageParams) {
 
   const createSlug = useMutation(api.slugs.createSlug);
   const [slugId, setSlugId] = useState<Id<"slugs"> | undefined>(undefined);
+  const getSlug = useQuery(api.slugs.getSlug, {
+    slug: slug,
+  });
 
   useEffect(() => {
     createSlugFn();
@@ -46,7 +49,11 @@ export default function Page(props: PageParams) {
           <div>
             <h3 className="text-2xl">{slug ? `Room: ${slug}` : ""}</h3>
             <h3>Editors Online: {usersInRoom.length + 1}</h3>
-            <Timer start={Date.now()} />
+            {getSlug ? (
+              <Timer start={getSlug._creationTime} />
+            ) : (
+              <div>Loading...</div>
+            )}
           </div>
         </div>
         <DocumentWrapper

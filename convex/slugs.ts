@@ -11,6 +11,7 @@ export const getSlug = query({
       .filter((s) => s.eq(s.field("slug"), args.slug))
       .first();
     console.log("getSlug", slug);
+    return slug;
   },
 });
 
