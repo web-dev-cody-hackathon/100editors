@@ -1,7 +1,10 @@
 import {
   animals,
   colorNames,
+  digitStringToNumber,
   digits,
+  digitsNumerals,
+  digitsText,
   fairyTaleBeginnings,
   monthsNames,
 } from "./ValidationLists";
@@ -190,10 +193,14 @@ export const Rules: RuleStore = [
     },
   },
   {
-    name: "should contain at least 7 digits",
-    description: "Must contain at least 7 digits",
+    name: "digits should add up to 42",
+    description: "Digits should add up to 42",
     validation: (text: string) => {
-      return getMatches(text, digits).length > 7;
+      const sum = getMatches(text, digits)
+        .map(digitStringToNumber)
+        .reduce((acc, val) => acc + val, 0);
+
+      return sum === 42;
     },
   },
   {
@@ -219,6 +226,14 @@ export const Rules: RuleStore = [
     validation: (text: string) => {
       const lines = text.split("\n");
       return lines.length >= 10;
+    },
+  },
+  {
+    name: "Must spell out digits",
+    description:
+      "We hear it's trendy to spell out each digit. Replace each numeral with it's longer counterpart",
+    validation: (text: string) => {
+      return getMatches(text, digitsNumerals).length === 0;
     },
   },
   {
