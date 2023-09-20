@@ -225,9 +225,9 @@ export const Rules: RuleStore = [
     name: "Min 3 words per line",
     description: "Must have atleast 3 words per line",
     validation: (text: string) => {
-      const lines = text.split("\n");
+      const lines = text.split("\n").filter((line) => line !== "");
       return lines.every((line) => {
-        const words = line.match(/[^ ,\-\n]+/g);
+        const words = line.split(" ");
         return words ? words.length >= 3 : false;
       });
     },
