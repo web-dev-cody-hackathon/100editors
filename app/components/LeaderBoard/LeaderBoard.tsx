@@ -1,7 +1,5 @@
 import { Id } from "@/convex/_generated/dataModel";
 
-import classes from './Leaderboard.module.css';
-
 interface LeaderBoardProps {
   allSlugs:
     | {
@@ -15,14 +13,13 @@ interface LeaderBoardProps {
 }
 export default function LeaderBoard(props: LeaderBoardProps) {
   const { allSlugs } = props;
-  if(!allSlugs) return;
   return (
-    <div className={classes.container}>
-      <h2 className={classes.title}>Leaderboard</h2>
-      <div className={classes.entries}>
+    <div>
+      <h2 className="pb-5 text-2xl text-left">Leaderboard</h2>
+      <div className="border-b-orange-50">
         {allSlugs?.map((slug) => {
           return (
-            <div key={slug._id} className={classes.entry}>
+            <div key={slug._id} className="flex flex-row gap-3">
               <p className="grow">Room: {slug.slug}</p>
               <p>Passed: {slug.passedTests}</p>
               <p>Failed: {slug.failedTests}</p>
