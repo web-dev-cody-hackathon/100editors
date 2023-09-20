@@ -10,7 +10,7 @@ export const getSlug = query({
       .query("slugs")
       .filter((s) => s.eq(s.field("slug"), args.slug))
       .first();
-    console.log("getSlug", slug);
+    return slug;
   },
 });
 
@@ -31,7 +31,6 @@ export const createSlug = mutation({
       .filter((s) => s.eq(s.field("slug"), args.slug))
       .first();
     if (existingSlug) {
-      console.log("slug already exists");
       const slugId = await ctx.db.replace(existingSlug._id, {
         slug: args.slug,
         startTime: existingSlug.startTime,
@@ -56,13 +55,14 @@ export const updateSlug = mutation({
   },
   handler: async (ctx, args) => {
     const { id } = args;
-    console.log("getId", await ctx.db.get(id));
+
+    const existingSlug = await ctx.db.get(id);
 
     await ctx.db.patch(id, {
       passedTests: args.passedTests,
       failedTests: args.failedTests,
-      endTime: args.endTime,
+      // if endTime already exists in existingSlug, don't update it
+      endTime: existingSlug?.endTime ? existingSlug.endTime : args.endTime,
     });
-    console.log("patch data", await ctx.db.get(id));
   },
 });
