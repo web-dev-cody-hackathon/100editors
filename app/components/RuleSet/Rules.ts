@@ -189,7 +189,7 @@ export const Rules: RuleStore = [
   },
   {
     name: "Some sentences should start with 'the'",
-    description: "Must have atleast 3 sentences that start with 'the'",
+    description: "Must have at least 3 sentences that start with 'the'",
     validation: (text: string) => {
       // split sentences based on . ! ? \n
       const theSentences = text
