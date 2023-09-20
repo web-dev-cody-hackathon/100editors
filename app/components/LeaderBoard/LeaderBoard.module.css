@@ -1,66 +1,66 @@
 /* // add overflow-y: auto */
 
-.container{
-    background-color: rgb(234, 237, 237);
-    height: auto;
-    width: 40vw;
-    border-radius: 1.0rem;
+.container {
+  background-color: rgb(234, 237, 237);
+  height: auto;
+  width: 40vw;
+  border-radius: 1rem;
 }
 
-.title{
-    padding: 1.25rem;
-    font-size: 1.5rem;
-    text-align: center;
+.title {
+  padding: 1.25rem;
+  font-size: 1.5rem;
+  text-align: center;
 }
 
-.tableHeader{
-    display: flex;
-    flex-direction: row;   
+.tableHeader {
+  display: flex;
+  flex-direction: row;
 }
 
 .tableHeader * {
-    width: 20%;
-    text-align: center;
+  width: 20%;
+  text-align: center;
 }
 
 .entries {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-    overflow-y: auto;
-    max-height: 50vh;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  overflow-y: auto;
+  max-height: 50vh;
 }
 
-.entry{
-    display: flex;
-    flex-direction: row;
-    background-color: rgb(243, 244, 246);
-    padding: 1.15rem;
-    text-align: center;
-    border-radius: 0.5rem;
-    border: 0.25px solid rgb(20, 32, 55);
-}
-
-.entry * {
-    width: 20%;
-}
-
-.entry:hover{
-    background-color: rgb(255, 255, 255);
+.entry {
+  display: flex;
+  flex-direction: row;
+  background-color: rgb(243, 244, 246);
+  padding: 1.15rem;
+  text-align: center;
+  border-radius: 0.5rem;
+  border: 0.25px solid rgb(20, 32, 55);
 }
 
 .entry * {
-    gap: 0.75rem;
+  width: 20%;
+}
+
+.entry:hover {
+  background-color: rgb(255, 255, 255);
+}
+
+.entry * {
+  gap: 0.75rem;
 }
 
 @media (prefers-color-scheme: dark) {
-    .entry{
-        background-color: #374151;
-    }
-    .container{
-        background-color: #111827;
-    }
-    .entry:hover{
-        background-color: rgb(0, 0, 0)
-    }
+  .entry {
+    background-color: #374151;
+  }
+  .container {
+    background-color: #111827;
+  }
+  .entry:hover {
+    background-color: rgb(0, 0, 0);
+  }
 }
