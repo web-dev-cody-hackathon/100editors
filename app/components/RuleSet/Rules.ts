@@ -42,7 +42,7 @@ export const Rules: RuleStore = [
   {
     name: "Continue the story-1",
     description:
-      "Must continue the story after the starting text (add atleast 10 words)",
+      "Must continue the story after the starting text (add at least 10 words)",
     validation: (text: string) => {
       const firstSentence = (text: string) => {
         const firstSlice = text
@@ -93,8 +93,7 @@ export const Rules: RuleStore = [
   },
   {
     name: "Word in sentence count",
-    description:
-      "Must have at least 4 words in each sentence (separated by spaces, commas or dashes)",
+    description: "Must have at least 4 words in each sentence",
     validation: (text: string) => {
       const sentences = text.match(/[^\.!\?]+[\.!\?]+/g);
       if (sentences) {
@@ -215,7 +214,7 @@ export const Rules: RuleStore = [
   },
   {
     name: "Must have 10 lines",
-    description: "Must have 10 lines",
+    description: "Must have at least 10 lines",
     validation: (text: string) => {
       const lines = text.split("\n");
       return lines.length >= 10;
@@ -223,7 +222,7 @@ export const Rules: RuleStore = [
   },
   {
     name: "Min 3 words per line",
-    description: "Must have atleast 3 words per line",
+    description: "Must have at least 3 words per line",
     validation: (text: string) => {
       const lines = text.split("\n").filter((line) => line !== "");
       return lines.every((line) => {
@@ -234,7 +233,7 @@ export const Rules: RuleStore = [
   },
   {
     name: "Blank lines every 5",
-    description: "Must have blank lines on every 5th line",
+    description: "Every 5th line must be blank",
     validation: (text: string) => {
       const lines = text.split("\n");
       const every5thLine = lines.filter((line, i) => (i + 1) % 5 === 0);
