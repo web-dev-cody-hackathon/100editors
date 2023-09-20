@@ -17,6 +17,7 @@ export default function DocumentWrapper(props: DocumentWrapperProps) {
   const [passedRules, setPassedRules] = useState<Rule[]>([] as Rule[]);
   const [failedRules, setFailedRules] = useState<Rule[]>([] as Rule[]);
   const [isCompleted, setIsCompleted] = useState<boolean>(false);
+  const [usersInRoom, setUsersInRoom] = useState<string[]>([] as string[]);
 
   useEffect(() => {
     if (slugId) {
@@ -36,6 +37,8 @@ export default function DocumentWrapper(props: DocumentWrapperProps) {
         setPassedRules={setPassedRules}
         setFailedRules={setFailedRules}
         setIsCompleted={setIsCompleted}
+        setUsersInRoom={setUsersInRoom}
+        usersInRoom={usersInRoom}
       />
       <RuleSet passedRules={passedRules} failedRules={failedRules} />
     </div>
