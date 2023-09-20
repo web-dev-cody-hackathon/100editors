@@ -50,8 +50,7 @@ export default function Page(props: PageParams) {
             <h3 className="text-2xl">{slug ? `Room: ${slug}` : ""}</h3>
             <h3>Editors Online: {usersInRoom.length + 1}</h3>
             {getSlug ? (
-                <RoomTimer start={getSlug._creationTime} />
-              <Timer start={getSlug._creationTime} />
+              <RoomTimer start={getSlug._creationTime} />
             ) : (
               <div>Loading...</div>
             )}

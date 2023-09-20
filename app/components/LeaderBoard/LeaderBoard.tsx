@@ -4,8 +4,6 @@ import { timeElapsed } from "../Timer/utils";
 
 import classes from "./LeaderBoard.module.css";
 
-import classes from "./LeaderBoard.module.css";
-
 interface LeaderBoardProps {
   allSlugs:
     | {
@@ -39,29 +37,35 @@ export default function LeaderBoard(props: LeaderBoardProps) {
                 <p>{slug.slug}</p>
                 <p>
                   {/* convert to percent */}
-                  {`${
+                  {/* {`${
                     Math.round(
                       ((slug.passedTests ?? 0) /
                         ((slug.passedTests ?? 0) + (slug.failedTests ?? 0))) *
                         100
                     ) || 0
-                  }%`}
+                  }%`} */}
 
-                  {/* {`${slug.passedTests || 0} / ${
+                  {`${slug.passedTests || 0} / ${
                     (slug.passedTests ?? 0 + slug.failedTests! ?? 0) || 0
-                  }`} */}
+                  }`}
                 </p>
 
                 <p>
                   {slug.endTime ? (
-                    timeElapsed({ start: slug.startTime, end: slug.endTime })
+                    timeElapsed({
+                      start: slug.startTime || Date.now(),
+                      end: slug.endTime || Date.now(),
+                    })
                   ) : (
                     <LeaderBoardTimer start={slug.startTime} />
                   )}
                 </p>
                 {slug.endTime && (
                   <p>
-                    {timeElapsed({ start: slug.startTime, end: slug.endTime })}
+                    {timeElapsed({
+                      start: slug.startTime || Date.now(),
+                      end: slug.endTime || Date.now(),
+                    })}
                   </p>
                 )}
               </div>
