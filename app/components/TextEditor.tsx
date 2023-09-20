@@ -16,6 +16,8 @@ import type { ReactQuillProps } from "react-quill";
 import { validateText } from "./RuleSet/RuleValidation";
 
 import "./textEditor.css";
+import "react-quill/dist/quill.core.css";
+import { Sources } from "quill";
 
 interface TextEditorProps extends ReactQuillProps {
   slug: string;
@@ -44,7 +46,10 @@ export default function TextEditor(props: TextEditorProps) {
 
     // default: ~20 max connections. Updated ~75 max connections
     const yProvider: WebrtcProviderType = new WebrtcProvider(slug, yDoc, {
-      signaling: ["wss://webrtc-production-ed77.up.railway.app"],
+       signaling: [
+        "wss://webrtc-production-ed77.up.railway.app",
+        // "ws://localhost:4444",
+      ],
       maxConns: 75 + Math.floor(Math.random() * 15),
     });
     // log when a user joins or leaves
@@ -74,7 +79,8 @@ export default function TextEditor(props: TextEditorProps) {
       yDoc.destroy();
       yProvider.destroy();
     };
-    // don't add slug because it breaks things
+
+    // Do not add slug to dependency arr or it will break everything
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -87,7 +93,7 @@ export default function TextEditor(props: TextEditorProps) {
     <div className="flex flex-col items-center align-items">
       <p className="text-center">Users in room: {usersInRoom.length + 1}</p>
       <QuillEditor
-        modules={{ toolbar: false }}
+        modules={{ toolbar: false, clipboard: false }}
         formats={[]}
         yText={text}
         provider={provider}
@@ -144,12 +150,19 @@ function QuillEditor(props: EditorProps) {
     });
   }, [setFailedRules, setIsCompleted, setPassedRules]);
 
+  useEffect(() => {
+    if (!reactQuillRef.current) {
+      return;
+    }
+
+    reactQuillRef.current.focus();
+  }, []);
+
   return (
-    <div className="flex flex-col relative min-w-[50vw] min-w-h-[70vh] h-full w-full mb-4 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
+    <div className="flex flex-col relative w-20 min-w-[50vw] min-w-h-[70vh] h-full mb-4 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600 break-words">
       <div className="relative h-full px-4 py-2 bg-white rounded-b-lg dark:bg-gray-800">
         <ReactQuill
           className="h-full w-full block px-0 text-sm text-gray-800 bg-white border-0 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 focus:ring-0 focus:ring-offset-0"
-          placeholder="Start typing here…"
           ref={reactQuillRef}
           modules={{
             toolbar: false,
@@ -170,8 +183,8 @@ function QuillEditor(props: EditorProps) {
           onChange={(
             _value: string,
             _delta: any,
-            _source: any,
-            editor: any
+            _source: Sources,
+            editor: ReactQuill.UnprivilegedEditor
           ) => {
             validateText({
               text: editor.getText(),

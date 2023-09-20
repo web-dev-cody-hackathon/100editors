@@ -1,3 +1,22 @@
 :focus {
   outline: none;
 }
+
+/* Let cursor flags show on the first line */
+div.ql-container {
+  overflow: unset;
+}
+
+/* Remove editor focus */
+div.ql-editor:focus {
+  outline: none;
+}
+
+/* Hide non-visible clipboard element */
+div.ql-clipboard {
+  left: -100000px;
+  height: 1px;
+  overflow-y: hidden;
+  position: absolute;
+  top: 50%;
+}
