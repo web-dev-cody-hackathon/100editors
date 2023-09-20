@@ -28,6 +28,7 @@
     flex-direction: column;
     gap: 0.75rem;
     overflow-y: auto;
+    max-height: 50vh;
 }
 
 .entry{
@@ -36,6 +37,8 @@
     background-color: rgb(243, 244, 246);
     padding: 1.15rem;
     text-align: center;
+    border-radius: 0.5rem;
+    border: 0.25px solid rgb(20, 32, 55);
 }
 
 .entry * {

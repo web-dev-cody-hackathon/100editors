@@ -29,10 +29,11 @@ export default function Home() {
             </footer>
           </div>
         </div>
-
-        <div className="flex flex-col h-full p-5 grow rounded-2xl">
-          <LeaderBoard allSlugs={allSlugs} />
-        </div>
+        {allSlugs && (
+          <div className="flex flex-col h-full p-5 grow rounded-2xl">
+            <LeaderBoard allSlugs={allSlugs} />
+          </div>
+        )}
       </div>
     </main>
   );
