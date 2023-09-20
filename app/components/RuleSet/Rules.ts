@@ -218,7 +218,7 @@ export const Rules: RuleStore = [
     },
   },
   {
-    name: "Must have 10 lines",
+    name: "Must have at least 10 lines",
     description: "Must have at least 10 lines",
     validation: (text: string) => {
       const lines = text.split("\n");
