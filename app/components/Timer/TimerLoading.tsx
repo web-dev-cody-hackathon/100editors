@@ -1,12 +1,30 @@
+import { Id } from "@/convex/_generated/dataModel";
 import Timer from "./Timer";
 
-export default function TimerLoading(props: { getSlug: any }) {
+interface TimerLoadingProps {
+  getSlug:
+    | {
+        startTime: number | null | undefined;
+        _id: Id<"slugs">;
+        _creationTime: number;
+        passedTests?: number | undefined;
+        failedTests?: number | undefined;
+        slug: string;
+      }
+    | null
+    | undefined;
+}
+
+export default function TimerLoading(props: TimerLoadingProps) {
   const { getSlug } = props;
-  if (!getSlug || !getSlug?.startTime) return <div>Loading...</div>;
 
   return (
     <>
-      {getSlug?.startTime && <Timer start={getSlug?.startTime || Date.now()} />}
+      {getSlug ? (
+        <Timer start={getSlug._creationTime} />
+      ) : (
+        <div>Loading...</div>
+      )}
     </>
   );
 }
