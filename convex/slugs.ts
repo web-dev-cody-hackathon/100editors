@@ -48,7 +48,12 @@ export const createSlug = mutation({
 });
 
 export const updateSlug = mutation({
-  args: { id: v.id("slugs"), passedTests: v.number(), failedTests: v.number() },
+  args: {
+    id: v.id("slugs"),
+    passedTests: v.number(),
+    failedTests: v.number(),
+    endTime: v.optional(v.number()),
+  },
   handler: async (ctx, args) => {
     const { id } = args;
     console.log("getId", await ctx.db.get(id));
@@ -56,6 +61,7 @@ export const updateSlug = mutation({
     await ctx.db.patch(id, {
       passedTests: args.passedTests,
       failedTests: args.failedTests,
+      endTime: args.endTime,
     });
     console.log("patch data", await ctx.db.get(id));
   },

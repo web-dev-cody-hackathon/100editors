@@ -1,4 +1,5 @@
 import { Id } from "@/convex/_generated/dataModel";
+import LeaderBoardTimer from "../Timer/LeaderBoardTimer";
 
 interface LeaderBoardProps {
   allSlugs:
@@ -8,6 +9,8 @@ interface LeaderBoardProps {
         passedTests?: number | undefined;
         failedTests?: number | undefined;
         slug: string;
+        startTime: number;
+        endTime?: number | undefined;
       }[]
     | undefined;
 }
@@ -23,7 +26,10 @@ export default function LeaderBoard(props: LeaderBoardProps) {
               <p className="grow">Room: {slug.slug}</p>
               <p>Passed: {slug.passedTests}</p>
               <p>Failed: {slug.failedTests}</p>
-              <p>Time: x seconds</p>
+              <p>Time: {<LeaderBoardTimer start={slug.startTime} />}</p>
+              {slug.endTime && (
+                <p>Completed: {<LeaderBoardTimer start={slug.endTime} />}</p>
+              )}
             </div>
           );
         })}

@@ -1,11 +1,11 @@
 "use client";
 
-import Timer from "../components/Timer/Timer";
 import dynamic from "next/dynamic";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { useEffect, useState } from "react";
 import { Id } from "@/convex/_generated/dataModel";
+import RoomTimer from "../components/Timer/RoomTimer";
 
 // we must disable SSR since ReactQuill attempts to access the `document`
 const DocumentWrapper = dynamic(() => import("../components/DocumentWrapper"), {
@@ -46,7 +46,7 @@ export default function Page(props: PageParams) {
           <div>
             <h3 className="text-2xl">{slug ? `Room: ${slug}` : ""}</h3>
             <h3>Editors Online: {usersInRoom.length + 1}</h3>
-            <Timer start={Date.now()} />
+            <RoomTimer start={Date.now()} />
           </div>
         </div>
         <DocumentWrapper

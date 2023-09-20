@@ -7,5 +7,6 @@ export default defineSchema({
     startTime: v.number(),
     passedTests: v.optional(v.number()),
     failedTests: v.optional(v.number()),
+    endTime: v.optional(v.number()),
   }),
 });
