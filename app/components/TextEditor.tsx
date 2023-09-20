@@ -14,6 +14,8 @@ import { useEffect, useRef, useState } from "react";
 import type { ReactQuillProps } from "react-quill";
 
 import { validateText } from "./RuleSet/RuleValidation";
+import { useMutation } from "convex/react";
+import { api } from "@/convex/_generated/api";
 
 import "./textEditor.css";
 import "react-quill/dist/quill.core.css";
@@ -115,6 +117,7 @@ type EditorProps = {
 };
 
 function QuillEditor(props: EditorProps) {
+  const updateSlug = useMutation(api.slugs.updateSlug);
   const { yText, provider, setPassedRules, setFailedRules, setIsCompleted } =
     props;
   const reactQuillRef = useRef<ReactQuill>(null);
