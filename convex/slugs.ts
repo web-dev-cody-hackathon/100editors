@@ -24,7 +24,6 @@ export const getAllSlugs = query({
 export const createSlug = mutation({
   args: {
     slug: v.string(),
-    // startTime: v.string(),
   },
   handler: async (ctx, args) => {
     const existingSlug = await ctx.db
@@ -35,13 +34,13 @@ export const createSlug = mutation({
       console.log("slug already exists");
       const slugId = await ctx.db.replace(existingSlug._id, {
         slug: args.slug,
-        // startTime: args.startTime,
+        startTime: existingSlug.startTime,
       });
       return slugId;
     } else {
       const slugId = await ctx.db.insert("slugs", {
         slug: args.slug,
-        // startTime: args.startTime,
+        startTime: Date.now(),
       });
       return slugId;
     }

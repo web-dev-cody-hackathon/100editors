@@ -4,7 +4,7 @@ import { v } from "convex/values";
 export default defineSchema({
   slugs: defineTable({
     slug: v.string(),
-    // startTime: v.string(),
+    startTime: v.number(),
     passedTests: v.optional(v.number()),
     failedTests: v.optional(v.number()),
   }),
