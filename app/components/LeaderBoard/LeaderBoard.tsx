@@ -3,23 +3,26 @@ import LeaderBoardTimer from "../Timer/LeaderBoardTimer";
 import { timeElapsed } from "../Timer/utils";
 
 import classes from "./LeaderBoard.module.css";
+import sortLeaderBoard from "./sortLeaderBoard";
 
-interface LeaderBoardProps {
-  allSlugs:
-    | {
-        _id: Id<"slugs">;
-        _creationTime: number;
-        passedTests?: number | undefined;
-        failedTests?: number | undefined;
-        slug: string;
-        startTime: number;
-        endTime?: number | undefined;
-      }[]
-    | undefined;
+export interface AllSlugs
+  extends Array<{
+    _id: Id<"slugs">;
+    _creationTime: number;
+    passedTests?: number | undefined;
+    failedTests?: number | undefined;
+    slug: string;
+    startTime: number;
+    endTime?: number | undefined;
+  }> {}
+
+export interface LeaderBoardProps {
+  allSlugs: AllSlugs | undefined;
 }
 
 export default function LeaderBoard(props: LeaderBoardProps) {
   const { allSlugs } = props;
+  const sortedAllSlugs = sortLeaderBoard(allSlugs ?? []);
   return (
     <div className={classes.container}>
       <h2 className={classes.title}>Leaderboard</h2>
@@ -31,7 +34,7 @@ export default function LeaderBoard(props: LeaderBoardProps) {
           <p>Completed</p>
         </div>
         <div>
-          {allSlugs?.map((slug) => {
+          {sortedAllSlugs?.map((slug) => {
             return (
               <div key={slug._id} className={classes.entry}>
                 <p>{slug.slug}</p>
@@ -63,8 +66,8 @@ export default function LeaderBoard(props: LeaderBoardProps) {
                 {slug.endTime && (
                   <p>
                     {timeElapsed({
-                      start: slug.startTime || Date.now(),
-                      end: slug.endTime || Date.now(),
+                      start: slug.startTime,
+                      end: slug.endTime,
                     })}
                   </p>
                 )}
