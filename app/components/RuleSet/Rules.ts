@@ -1,9 +1,11 @@
 import {
   animals,
   colorNames,
+  digits,
   fairyTaleBeginnings,
   monthsNames,
 } from "./ValidationLists";
+import getMatches from "./getMatches";
 
 export interface Rule {
   name: string;
@@ -123,7 +125,7 @@ export const Rules: RuleStore = [
     name: "add your lucky number",
     description: "Must have your lucky number",
     validation: (text: string) => {
-      return /\d/.test(text);
+      return getMatches(text, digits).length > 0;
     },
   },
   {
@@ -188,8 +190,8 @@ export const Rules: RuleStore = [
     },
   },
   {
-    name: "Some sentences should start with 'the'",
-    description: "Must have at least 3 sentences that start with 'the'",
+    name: "should contain at least 7 digits",
+    description: "Must contain at least 7 digits",
     validation: (text: string) => {
       // split sentences based on . ! ? \n
       const theSentences = text
