@@ -6,18 +6,20 @@ import { api } from "@/convex/_generated/api";
 import { useMutation, useQuery } from "convex/react";
 import { Id } from "@/convex/_generated/dataModel";
 
+import type { Dispatch, SetStateAction } from "react";
+
 interface DocumentWrapperProps {
   slug: string;
   slugId: Id<"slugs"> | undefined;
+  usersInRoom: string[];
+  setUsersInRoom: Dispatch<SetStateAction<string[]>>;
 }
 export default function DocumentWrapper(props: DocumentWrapperProps) {
   const updateSlug = useMutation(api.slugs.updateSlug);
-  const { slug, slugId } = props;
-
-  const [passedRules, setPassedRules] = useState<Rule[]>([] as Rule[]);
-  const [failedRules, setFailedRules] = useState<Rule[]>([] as Rule[]);
+  const { slug, slugId, usersInRoom, setUsersInRoom } = props;
+  const [passedRules, setPassedRules] = useState<Rule[]>([]);
+  const [failedRules, setFailedRules] = useState<Rule[]>([]);
   const [isCompleted, setIsCompleted] = useState<boolean>(false);
-  const [usersInRoom, setUsersInRoom] = useState<string[]>([] as string[]);
 
   useEffect(() => {
     if (slugId) {

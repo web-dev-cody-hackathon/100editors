@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import Timer from "../components/Timer/Timer";
 import dynamic from "next/dynamic";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
@@ -20,6 +20,7 @@ interface PageParams {
 export default function Page(props: PageParams) {
   const { params } = props;
   const { slug } = params;
+  const [usersInRoom, setUsersInRoom] = useState<string[]>([]);
 
   const createSlug = useMutation(api.slugs.createSlug);
   const [slugId, setSlugId] = useState<Id<"slugs"> | undefined>(undefined);
@@ -39,9 +40,22 @@ export default function Page(props: PageParams) {
 
   return (
     <main className="flex flex-col items-center pt-4">
-      <h1 className="mb-6 text-3xl">100Editors</h1>
-      <h3 className="mb-6 text-2xl">{slug ? `Room: ${slug}` : ""}</h3>
-      <DocumentWrapper slug={slug} slugId={slugId} />
+      <div>
+        <div className="flex items-end justify-between py-10">
+          <h1 className="text-4xl">100Editors</h1>
+          <div>
+            <h3 className="text-2xl">{slug ? `Room: ${slug}` : ""}</h3>
+            <h3>Editors Online: {usersInRoom.length + 1}</h3>
+            <Timer start={Date.now()} />
+          </div>
+        </div>
+        <DocumentWrapper
+          slug={slug}
+          slugId={slugId}
+          usersInRoom={usersInRoom}
+          setUsersInRoom={setUsersInRoom}
+        />
+      </div>
     </main>
   );
 }

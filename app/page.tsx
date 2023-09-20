@@ -2,7 +2,6 @@
 
 import { useQuery } from "convex/react";
 import LinkGenerator from "./components/LinkGenerator";
-import Image from "next/image";
 import { api } from "@/convex/_generated/api";
 import LeaderBoard from "./components/LeaderBoard/LeaderBoard";
 
