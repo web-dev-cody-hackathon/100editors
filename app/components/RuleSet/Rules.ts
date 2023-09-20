@@ -193,13 +193,7 @@ export const Rules: RuleStore = [
     name: "should contain at least 7 digits",
     description: "Must contain at least 7 digits",
     validation: (text: string) => {
-      // split sentences based on . ! ? \n
-      const theSentences = text
-        .split(/\.|\!|\?|\n/)
-        .map((sentence) => sentence.trim())
-        .filter((sentence) => sentence.toLowerCase().startsWith("the "));
-
-      return theSentences.length >= 3;
+      return getMatches(text, digits).length > 7;
     },
   },
   {
