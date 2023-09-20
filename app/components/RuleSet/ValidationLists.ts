@@ -360,3 +360,23 @@ export const digitStringToNumber = (digit: string): number => {
   // @ts-ignore
   return digitMap[digit] ?? 0;
 };
+
+export const digitToWordMap = {
+  "0": "zero",
+  "1": "one",
+  "2": "two",
+  "3": "three",
+  "4": "four",
+  "5": "five",
+  "6": "six",
+  "7": "seven",
+  "8": "eight",
+  "9": "nine",
+};
+
+export const replaceNumeralsWithText = (x: string): string => {
+  return x.replace(/[0-9]/g, (digit) => {
+    // @ts-ignore
+    return digitToWordMap[digit];
+  });
+};
