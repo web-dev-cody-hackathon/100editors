@@ -305,17 +305,7 @@ export const monthsNames = [
   "Sept",
 ];
 
-export const digits = [
-  "zero",
-  "one",
-  "two",
-  "three",
-  "four",
-  "five",
-  "six",
-  "seven",
-  "eight",
-  "nine",
+export const digitsNumerals = [
   "0",
   "1",
   "2",
@@ -327,3 +317,18 @@ export const digits = [
   "8",
   "9",
 ];
+
+export const digitsText = [
+  "zero",
+  "one",
+  "two",
+  "three",
+  "four",
+  "five",
+  "six",
+  "seven",
+  "eight",
+  "nine",
+];
+
+export const digits = [...digitsNumerals, ...digitsText];
