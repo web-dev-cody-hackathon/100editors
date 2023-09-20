@@ -69,7 +69,6 @@ export default function Page(props: PageParams) {
         <DocumentWrapper
           slug={slug}
           slugId={slugId}
-          usersInRoom={usersInRoom}
           setUsersInRoom={setUsersInRoom}
         />
       </div>

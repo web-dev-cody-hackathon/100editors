@@ -27,7 +27,7 @@ interface TextEditorProps extends ReactQuillProps {
   setFailedRules: React.Dispatch<React.SetStateAction<Rule[]>>;
   setIsCompleted: React.Dispatch<React.SetStateAction<boolean>>;
   setUsersInRoom: React.Dispatch<React.SetStateAction<string[]>>;
-  usersInRoom: string[];
+  isCompleted: boolean;
 }
 
 export default function TextEditor(props: TextEditorProps) {
@@ -37,7 +37,7 @@ export default function TextEditor(props: TextEditorProps) {
     setIsCompleted,
     slug,
     setUsersInRoom,
-    usersInRoom,
+    isCompleted,
   } = props;
   const [text, setText] = useState<Y.Text>();
   const [provider, setProvider] = useState<WebrtcProviderType>();
@@ -102,6 +102,7 @@ export default function TextEditor(props: TextEditorProps) {
         setFailedRules={setFailedRules}
         setPassedRules={setPassedRules}
         setIsCompleted={setIsCompleted}
+        isCompleted={isCompleted}
         slug={slug}
       />
     </div>
@@ -115,6 +116,7 @@ type EditorProps = {
   setFailedRules: React.Dispatch<React.SetStateAction<Rule[]>>;
   setIsCompleted: React.Dispatch<React.SetStateAction<boolean>>;
   slug: string;
+  isCompleted: boolean;
 };
 
 function QuillEditor(props: EditorProps) {
@@ -126,6 +128,7 @@ function QuillEditor(props: EditorProps) {
     setFailedRules,
     setIsCompleted,
     slug,
+    isCompleted,
   } = props;
   const reactQuillRef = useRef<ReactQuill>(null);
   // Set up Yjs and Quill
@@ -175,6 +178,7 @@ function QuillEditor(props: EditorProps) {
         <ReactQuill
           className="h-full w-full block px-0 text-sm text-gray-800 bg-white border-0 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 focus:ring-0 focus:ring-offset-0"
           ref={reactQuillRef}
+          readOnly={isCompleted}
           modules={{
             toolbar: false,
             cursors: {
