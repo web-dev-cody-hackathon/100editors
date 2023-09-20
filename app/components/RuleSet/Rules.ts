@@ -41,8 +41,7 @@ export const Rules: RuleStore = [
   },
   {
     name: "Continue the story-1",
-    description:
-      "Must continue the story after the starting text (add at least 10 words)",
+    description: "There's not enough words here. Add some more",
     validation: (text: string) => {
       const firstSentence = (text: string) => {
         const firstSlice = text
