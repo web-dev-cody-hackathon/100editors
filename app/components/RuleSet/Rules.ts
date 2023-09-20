@@ -7,13 +7,14 @@ import {
   digitsText,
   fairyTaleBeginnings,
   monthsNames,
+  replaceNumeralsWithText,
 } from "./ValidationLists";
 import getMatches from "./getMatches";
 
 export interface Rule {
   name: string;
   description: string;
-  validation: (text: string) => boolean;
+  validation: (text: string, slug?: string) => boolean;
   completed?: boolean;
 }
 
@@ -107,6 +108,13 @@ export const Rules: RuleStore = [
         });
       }
       return false;
+    },
+  },
+  {
+    name: "Must contain the room code",
+    description: "Must contain the room code",
+    validation: (text: string, slug = "") => {
+      return getMatches(text, [slug, replaceNumeralsWithText(slug)]).length > 0;
     },
   },
   {

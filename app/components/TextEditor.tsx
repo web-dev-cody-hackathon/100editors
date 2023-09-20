@@ -102,6 +102,7 @@ export default function TextEditor(props: TextEditorProps) {
         setFailedRules={setFailedRules}
         setPassedRules={setPassedRules}
         setIsCompleted={setIsCompleted}
+        slug={slug}
       />
     </div>
   );
@@ -113,12 +114,19 @@ type EditorProps = {
   setPassedRules: React.Dispatch<React.SetStateAction<Rule[]>>;
   setFailedRules: React.Dispatch<React.SetStateAction<Rule[]>>;
   setIsCompleted: React.Dispatch<React.SetStateAction<boolean>>;
+  slug: string;
 };
 
 function QuillEditor(props: EditorProps) {
   const updateSlug = useMutation(api.slugs.updateSlug);
-  const { yText, provider, setPassedRules, setFailedRules, setIsCompleted } =
-    props;
+  const {
+    yText,
+    provider,
+    setPassedRules,
+    setFailedRules,
+    setIsCompleted,
+    slug,
+  } = props;
   const reactQuillRef = useRef<ReactQuill>(null);
   // Set up Yjs and Quill
   useEffect(() => {
@@ -145,6 +153,7 @@ function QuillEditor(props: EditorProps) {
   useEffect(() => {
     validateText({
       text: "",
+      slug: slug,
       rules: Rules,
       setFailedRules,
       setPassedRules,
@@ -191,6 +200,7 @@ function QuillEditor(props: EditorProps) {
             validateText({
               text: editor.getText(),
               rules: Rules,
+              slug,
               setFailedRules,
               setPassedRules,
               setIsCompleted,
