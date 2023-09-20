@@ -46,7 +46,7 @@ export default function TextEditor(props: TextEditorProps) {
 
     // default: ~20 max connections. Updated ~75 max connections
     const yProvider: WebrtcProviderType = new WebrtcProvider(slug, yDoc, {
-       signaling: [
+      signaling: [
         "wss://webrtc-production-ed77.up.railway.app",
         // "ws://localhost:4444",
       ],
