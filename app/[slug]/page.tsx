@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useMutation, useQuery } from "convex/react";
+import { useConvex, useMutation, useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { useEffect, useState } from "react";
 import { Id } from "@/convex/_generated/dataModel";
@@ -25,21 +25,33 @@ export default function Page(props: PageParams) {
 
   const createSlug = useMutation(api.slugs.createSlug);
   const [slugId, setSlugId] = useState<Id<"slugs"> | undefined>(undefined);
+  const convex = useConvex();
   const getSlug = useQuery(api.slugs.getSlug, {
     slug: slug,
   });
 
   useEffect(() => {
     createSlugFn();
+    if (getSlug) {
+      setSlugId(getSlug._id);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   async function createSlugFn() {
-    const res = await createSlug({
+    const getTheSlug = await convex.query(api.slugs.getSlug, {
       slug: slug,
     });
 
-    setSlugId(res as Id<"slugs">);
+    if (!getTheSlug) {
+      const res = await createSlug({
+        slug: slug,
+      });
+
+      setSlugId(res as Id<"slugs">);
+    } else {
+      setSlugId(getTheSlug._id);
+    }
   }
 
   return (
