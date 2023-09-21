@@ -14,12 +14,13 @@ import { useEffect, useRef, useState } from "react";
 import type { ReactQuillProps } from "react-quill";
 
 import { validateText } from "./RuleSet/RuleValidation";
-import { useMutation } from "convex/react";
-import { api } from "@/convex/_generated/api";
 
 import "./textEditor.css";
 import "react-quill/dist/quill.core.css";
 import { Sources } from "quill";
+type OnChange = NonNullable<ReactQuill.ReactQuillProps["onChange"]>;
+type OnChangeParams = Parameters<OnChange>;
+export type DeltaStatic = OnChangeParams[1];
 
 interface TextEditorProps extends ReactQuillProps {
   slug: string;
@@ -30,6 +31,8 @@ interface TextEditorProps extends ReactQuillProps {
   isCompleted: boolean;
   text: Y.Text | undefined;
   setText: React.Dispatch<React.SetStateAction<Y.Text | undefined>>;
+  textDelta: string;
+  setTextDelta: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export default function TextEditor(props: TextEditorProps) {
@@ -42,13 +45,18 @@ export default function TextEditor(props: TextEditorProps) {
     isCompleted,
     text,
     setText,
+    setTextDelta,
+    textDelta,
   } = props;
 
   const [provider, setProvider] = useState<WebrtcProviderType>();
+  // console.log(provider?.room?.bcConns.size);
 
   useEffect(() => {
     const yDoc = new Y.Doc();
     const yText = yDoc.getText(slug);
+
+    // setTextDelta(yText.toString());
 
     // default: ~20 max connections. Updated ~75 max connections
     const yProvider: WebrtcProviderType = new WebrtcProvider(slug, yDoc, {
@@ -58,6 +66,7 @@ export default function TextEditor(props: TextEditorProps) {
       ],
       maxConns: 75 + Math.floor(Math.random() * 15),
     });
+
     // log when a user joins or leaves
     yProvider.awareness.on(
       "change",
@@ -75,6 +84,13 @@ export default function TextEditor(props: TextEditorProps) {
           removed.forEach((user) => newUsers.delete(user));
           return Array.from(newUsers);
         });
+
+        // if (yProvider?.room?.bcConns.size === 0) {
+        //   // yText.insert(0, "abcde");
+
+        // }
+        // console.log("text", yText);
+        // setTextDelta(yText.toDelta());
       }
     );
 
@@ -89,6 +105,10 @@ export default function TextEditor(props: TextEditorProps) {
     // Do not add slug to dependency arr or it will break everything
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // useEffect(() => {
+  //   console.log("yText", text);
+  // }, []);
 
   // TODO proper error handling
   if (!text || !provider) {
@@ -108,6 +128,8 @@ export default function TextEditor(props: TextEditorProps) {
         setIsCompleted={setIsCompleted}
         isCompleted={isCompleted}
         slug={slug}
+        textDelta={textDelta}
+        setTextDelta={setTextDelta}
       />
     </div>
   );
@@ -121,10 +143,11 @@ type EditorProps = {
   setIsCompleted: React.Dispatch<React.SetStateAction<boolean>>;
   slug: string;
   isCompleted: boolean;
+  textDelta: string;
+  setTextDelta: React.Dispatch<React.SetStateAction<string>>;
 };
 
 function QuillEditor(props: EditorProps) {
-  const updateSlug = useMutation(api.slugs.updateSlug);
   const {
     yText,
     provider,
@@ -133,6 +156,8 @@ function QuillEditor(props: EditorProps) {
     setIsCompleted,
     slug,
     isCompleted,
+    textDelta,
+    setTextDelta,
   } = props;
   const reactQuillRef = useRef<ReactQuill>(null);
   // Set up Yjs and Quill
@@ -143,6 +168,11 @@ function QuillEditor(props: EditorProps) {
 
     const quill = reactQuillRef.current.getEditor();
     const binding = new QuillBinding(yText, quill, provider.awareness);
+    if (provider?.room?.bcConns.size === 0) {
+      // yText.insert(0, "abcde");
+      console.log("textDelta", textDelta);
+      quill.setText(textDelta || "");
+    }
 
     return () => {
       binding.destroy();
@@ -156,6 +186,13 @@ function QuillEditor(props: EditorProps) {
 
     reactQuillRef.current.focus();
   }, []);
+
+  // useEffect(() => {
+  //   if (provider?.room?.bcConns.size === 0) {
+  //     // yText.insert(0, "abcde");
+  //     reactQuillRef.current.setText("Hello\n");
+  //   }
+  // }, []);
 
   useEffect(() => {
     validateText({
@@ -201,7 +238,7 @@ function QuillEditor(props: EditorProps) {
           }}
           onChange={(
             _value: string,
-            _delta: any,
+            _delta: DeltaStatic,
             _source: Sources,
             editor: ReactQuill.UnprivilegedEditor
           ) => {
@@ -213,6 +250,8 @@ function QuillEditor(props: EditorProps) {
               setPassedRules,
               setIsCompleted,
             });
+            // console.log("text", editor.getText());
+            setTextDelta(editor.getText());
           }}
         />
       </div>

@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { Id } from "@/convex/_generated/dataModel";
 import RoomTimer from "../components/Timer/RoomTimer";
 import { timeElapsed } from "../components/Timer/utils";
+import { DeltaStatic } from "../components/TextEditor";
 
 // we must disable SSR since ReactQuill attempts to access the `document`
 const DocumentWrapper = dynamic(() => import("../components/DocumentWrapper"), {
@@ -25,6 +26,7 @@ export default function Page(props: PageParams) {
 
   const createSlug = useMutation(api.slugs.createSlug);
   const [slugId, setSlugId] = useState<Id<"slugs"> | undefined>(undefined);
+  const [textDelta, setTextDelta] = useState<string>("");
 
   const convex = useConvex();
   const getSlug = useQuery(api.slugs.getSlug, {
@@ -53,6 +55,7 @@ export default function Page(props: PageParams) {
       setSlugId(res as Id<"slugs">);
     } else {
       setSlugId(getTheSlug._id);
+      setTextDelta(getTheSlug.docText);
     }
   }
 
@@ -84,6 +87,8 @@ export default function Page(props: PageParams) {
           slug={slug}
           slugId={slugId}
           setUsersInRoom={setUsersInRoom}
+          textDelta={textDelta}
+          setTextDelta={setTextDelta}
         />
       </div>
     </main>
