@@ -5,6 +5,7 @@ import { Rule } from "./RuleSet/Rules";
 import { api } from "@/convex/_generated/api";
 import { useMutation, useQuery } from "convex/react";
 import { Id } from "@/convex/_generated/dataModel";
+import * as Y from "yjs";
 
 import type { Dispatch, SetStateAction } from "react";
 
@@ -19,6 +20,7 @@ export default function DocumentWrapper(props: DocumentWrapperProps) {
   const [passedRules, setPassedRules] = useState<Rule[]>([]);
   const [failedRules, setFailedRules] = useState<Rule[]>([]);
   const [isCompleted, setIsCompleted] = useState<boolean>(false);
+  const [text, setText] = useState<Y.Text>();
 
   useEffect(() => {
     if (slugId) {
@@ -27,6 +29,7 @@ export default function DocumentWrapper(props: DocumentWrapperProps) {
         passedTests: passedRules.length,
         failedTests: failedRules.length,
         endTime: isCompleted ? Date.now() : undefined,
+        docText: text?.toJSON() ?? "",
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -41,6 +44,8 @@ export default function DocumentWrapper(props: DocumentWrapperProps) {
         setIsCompleted={setIsCompleted}
         setUsersInRoom={setUsersInRoom}
         isCompleted={isCompleted}
+        text={text}
+        setText={setText}
       />
       <RuleSet passedRules={passedRules} failedRules={failedRules} />
     </div>

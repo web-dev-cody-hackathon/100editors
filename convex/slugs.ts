@@ -25,6 +25,7 @@ export const getAllSlugs = query({
 export const createSlug = mutation({
   args: {
     slug: v.string(),
+    docText: v.string(),
   },
   handler: async (ctx, args) => {
     const existingSlug = await ctx.db
@@ -35,12 +36,14 @@ export const createSlug = mutation({
       const slugId = await ctx.db.replace(existingSlug._id, {
         slug: args.slug,
         startTime: existingSlug.startTime,
+        docText: args.docText,
       });
       return slugId;
     } else {
       const slugId = await ctx.db.insert("slugs", {
         slug: args.slug,
         startTime: Date.now(),
+        docText: args.docText,
       });
       return slugId;
     }
@@ -53,6 +56,7 @@ export const updateSlug = mutation({
     passedTests: v.number(),
     failedTests: v.number(),
     endTime: v.optional(v.number()),
+    docText: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
     const { id } = args;
@@ -64,6 +68,7 @@ export const updateSlug = mutation({
       failedTests: args.failedTests,
       // if endTime already exists in existingSlug, don't update it
       endTime: existingSlug?.endTime ? existingSlug.endTime : args.endTime,
+      docText: args.docText ? args.docText : existingSlug?.docText,
     });
   },
 });

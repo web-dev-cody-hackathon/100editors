@@ -28,6 +28,8 @@ interface TextEditorProps extends ReactQuillProps {
   setIsCompleted: React.Dispatch<React.SetStateAction<boolean>>;
   setUsersInRoom: React.Dispatch<React.SetStateAction<string[]>>;
   isCompleted: boolean;
+  text: Y.Text | undefined;
+  setText: React.Dispatch<React.SetStateAction<Y.Text | undefined>>;
 }
 
 export default function TextEditor(props: TextEditorProps) {
@@ -38,8 +40,10 @@ export default function TextEditor(props: TextEditorProps) {
     slug,
     setUsersInRoom,
     isCompleted,
+    text,
+    setText,
   } = props;
-  const [text, setText] = useState<Y.Text>();
+
   const [provider, setProvider] = useState<WebrtcProviderType>();
 
   useEffect(() => {

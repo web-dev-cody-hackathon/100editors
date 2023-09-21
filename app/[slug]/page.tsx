@@ -25,6 +25,7 @@ export default function Page(props: PageParams) {
 
   const createSlug = useMutation(api.slugs.createSlug);
   const [slugId, setSlugId] = useState<Id<"slugs"> | undefined>(undefined);
+
   const convex = useConvex();
   const getSlug = useQuery(api.slugs.getSlug, {
     slug: slug,
@@ -46,6 +47,7 @@ export default function Page(props: PageParams) {
     if (!getTheSlug) {
       const res = await createSlug({
         slug: slug,
+        docText: "",
       });
 
       setSlugId(res as Id<"slugs">);
