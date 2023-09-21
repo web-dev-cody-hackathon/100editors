@@ -7,7 +7,6 @@ import { useEffect, useState } from "react";
 import { Id } from "@/convex/_generated/dataModel";
 import RoomTimer from "../components/Timer/RoomTimer";
 import { timeElapsed } from "../components/Timer/utils";
-import { DeltaStatic } from "../components/TextEditor";
 
 // we must disable SSR since ReactQuill attempts to access the `document`
 const DocumentWrapper = dynamic(() => import("../components/DocumentWrapper"), {

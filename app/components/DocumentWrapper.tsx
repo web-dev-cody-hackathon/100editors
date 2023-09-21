@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import RuleSet from "./RuleSet/RuleSet";
-import TextEditor, { DeltaStatic } from "./TextEditor";
+import TextEditor from "./TextEditor";
 import { Rule } from "./RuleSet/Rules";
 import { api } from "@/convex/_generated/api";
 import { useMutation, useQuery } from "convex/react";

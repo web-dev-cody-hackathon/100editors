@@ -50,13 +50,10 @@ export default function TextEditor(props: TextEditorProps) {
   } = props;
 
   const [provider, setProvider] = useState<WebrtcProviderType>();
-  // console.log(provider?.room?.bcConns.size);
 
   useEffect(() => {
     const yDoc = new Y.Doc();
     const yText = yDoc.getText(slug);
-
-    // setTextDelta(yText.toString());
 
     // default: ~20 max connections. Updated ~75 max connections
     const yProvider: WebrtcProviderType = new WebrtcProvider(slug, yDoc, {
@@ -72,11 +69,11 @@ export default function TextEditor(props: TextEditorProps) {
       "change",
       ({
         added,
-        updated,
+        _updated,
         removed,
       }: {
         added: string[];
-        updated: string[];
+        _updated: string[];
         removed: string[];
       }) => {
         setUsersInRoom((prev) => {
@@ -84,13 +81,6 @@ export default function TextEditor(props: TextEditorProps) {
           removed.forEach((user) => newUsers.delete(user));
           return Array.from(newUsers);
         });
-
-        // if (yProvider?.room?.bcConns.size === 0) {
-        //   // yText.insert(0, "abcde");
-
-        // }
-        // console.log("text", yText);
-        // setTextDelta(yText.toDelta());
       }
     );
 
@@ -105,10 +95,6 @@ export default function TextEditor(props: TextEditorProps) {
     // Do not add slug to dependency arr or it will break everything
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  // useEffect(() => {
-  //   console.log("yText", text);
-  // }, []);
 
   // TODO proper error handling
   if (!text || !provider) {
@@ -187,13 +173,6 @@ function QuillEditor(props: EditorProps) {
     reactQuillRef.current.focus();
   }, []);
 
-  // useEffect(() => {
-  //   if (provider?.room?.bcConns.size === 0) {
-  //     // yText.insert(0, "abcde");
-  //     reactQuillRef.current.setText("Hello\n");
-  //   }
-  // }, []);
-
   useEffect(() => {
     validateText({
       text: "",
@@ -250,7 +229,6 @@ function QuillEditor(props: EditorProps) {
               setPassedRules,
               setIsCompleted,
             });
-            // console.log("text", editor.getText());
             setTextDelta(editor.getText());
           }}
         />
