@@ -407,4 +407,30 @@ export const Rules: RuleStore = [
         : includesCapitalChar && includesLowercaseChar;
     },
   },
+  {
+    name: "Add emojis",
+    description:
+      "The story looks a little sad. Add some emojis. Hint: https://emojipedia.org/random",
+    validation: ({ text }) => {
+      // get an array of all the emojis in the text separated by commas, not just the first match
+      const emojiRegex = /[\uD800-\uDBFF][\uDC00-\uDFFF]/g;
+
+      const emojis = text.match(emojiRegex);
+
+      const isPassing = emojis ? emojis.length >= 3 : false;
+      if (!isPassing) {
+        console.log(
+          `Emojis found: ${emojis?.toString() || "none"}`,
+          `${
+            emojis && emojis.length <= 3
+              ? `Add ${3 - emojis.length} more ${
+                  emojis.length === 2 ? "emoji" : "emojis"
+                }`
+              : "|| Hint: https://emojipedia.org/random"
+          }`
+        );
+      }
+      return isPassing;
+    },
+  },
 ];
