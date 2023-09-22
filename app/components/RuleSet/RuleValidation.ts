@@ -26,7 +26,7 @@ export const validateText = (props: ValidateTextProps) => {
       }
 
       const rule = rules[i];
-      if (!rule.validation(text, slug)) {
+      if (!rule.validation({ text, slug })) {
         rule.completed = false;
         failedRules.push(rule);
       } else {
