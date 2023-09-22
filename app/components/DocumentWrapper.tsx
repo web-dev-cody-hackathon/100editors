@@ -20,6 +20,7 @@ export default function DocumentWrapper(props: DocumentWrapperProps) {
   const [passedRules, setPassedRules] = useState<Rule[]>([]);
   const [failedRules, setFailedRules] = useState<Rule[]>([]);
   const [isCompleted, setIsCompleted] = useState<boolean>(false);
+  const [isLoaded, setIsLoaded] = useState<boolean>(false);
 
   useEffect(() => {
     if (slugId) {
@@ -35,6 +36,9 @@ export default function DocumentWrapper(props: DocumentWrapperProps) {
 
   return (
     <div className="flex justify-center content-center flex-row gap-5">
+      {/* show 'loading...' if loading, else show 'loaded' */}
+      {isLoaded ? <h2>loaded</h2> : <h2>loading...</h2>}
+
       <TextEditor
         slug={slug}
         setPassedRules={setPassedRules}
@@ -42,6 +46,7 @@ export default function DocumentWrapper(props: DocumentWrapperProps) {
         setIsCompleted={setIsCompleted}
         setUsersInRoom={setUsersInRoom}
         usersInRoom={usersInRoom}
+        setIsLoaded={setIsLoaded}
       />
       <RuleSet passedRules={passedRules} failedRules={failedRules} />
     </div>
