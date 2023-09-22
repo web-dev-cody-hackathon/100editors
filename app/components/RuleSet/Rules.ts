@@ -108,6 +108,25 @@ export const Rules: RuleStore = [
     },
   },
   {
+    name: "Include a word with a letter - 3",
+    description:
+      "Add 1 english word with the letter 'Z' in it. Hint: See console :)",
+    validation: ({ text }) => {
+      // use the wordsWithZ array
+      const words = text.match(/[^ ,\-\n]+/g);
+
+      const matchingWords = words?.filter((word) =>
+        wordsWithZ.includes(word.toLowerCase())
+      );
+      const isPassing = matchingWords ? matchingWords.length >= 1 : false;
+      if (!isPassing) {
+        // if there are no matching words, log "none", otherwise log the matching words
+        console.log(`Words that count: ${matchingWords?.toString() || "none"}`);
+      }
+      return isPassing;
+    },
+  },
+  {
     name: "Must contain the room code",
     description: "Must contain the room code",
     validation: ({ text, slug }) => {
@@ -189,6 +208,24 @@ export const Rules: RuleStore = [
     },
   },
   {
+    name: "Include a word with a letter - 2",
+    description:
+      "Add 2 english words with the letter 'J' in it. Hint: See console :)",
+    validation: ({ text }) => {
+      // use the wordsWithY array
+      const words = text.match(/[^ ,\-\n]+/g);
+      const matchingWords = words?.filter((word) =>
+        wordsWithJ.includes(word.toLowerCase())
+      );
+      const isPassing = matchingWords ? matchingWords.length >= 2 : false;
+      if (!isPassing) {
+        // if there are no matching words, log "none", otherwise log the matching words
+        console.log(`Words that count: ${matchingWords?.toString() || "none"}`);
+      }
+      return isPassing;
+    },
+  },
+  {
     name: "Today's day of the week",
     description: "Must have today's day of the week in Toronto",
     validation: ({ text }) => {
@@ -209,6 +246,30 @@ export const Rules: RuleStore = [
     },
   },
   {
+    name: "Capitalize a random letter - 3",
+    description: `Must capitalize all ${new Date()
+      .toLocaleDateString("en-US", {
+        month: "long",
+        timeZone: "America/New_York",
+      })[2]
+      .toUpperCase()}'s`,
+    validation: ({ text }) => {
+      // get the current month and return the 1st letter of the month
+      const char = new Date().toLocaleDateString("en-US", {
+        month: "long",
+        timeZone: "America/New_York",
+      })[2];
+      const includesCapitalChar = text.includes(char.toUpperCase());
+      const includesLowercaseChar = !text.includes(char.toLowerCase());
+
+      const occurrences = getMatches(text, [char]);
+
+      return occurrences.length === 0
+        ? true
+        : includesCapitalChar && includesLowercaseChar;
+    },
+  },
+  {
     name: "digits should add up to 42",
     description: "Digits should add up to 42 (check the console for the sum)",
     validation: ({ text }) => {
@@ -218,6 +279,23 @@ export const Rules: RuleStore = [
       const isPassing = sum === 42;
       if (!isPassing) {
         console.log("Sum of digits:", sum);
+      }
+      return isPassing;
+    },
+  },
+  {
+    name: "Include a word with a letter - 1",
+    description:
+      "Add 3 english words with the letter 'X' in it. Hint: See console :)",
+    validation: ({ text }) => {
+      const words = text.match(/[^ ,\-\n]+/g);
+      const matchingWords = words?.filter((word) =>
+        wordsWithX.includes(word.toLowerCase())
+      );
+      const isPassing = matchingWords ? matchingWords.length >= 3 : false;
+      if (!isPassing) {
+        // if there are no matching words, log "none", otherwise log the matching words
+        console.log(`Words that count: ${matchingWords?.toString() || "none"}`);
       }
       return isPassing;
     },
@@ -253,6 +331,18 @@ export const Rules: RuleStore = [
       "We hear it's trendy to spell out each digit. Replace each numeral with it's longer counterpart",
     validation: ({ text }) => {
       return getMatches(text, digitsNumerals).length === 0;
+    },
+  },
+  {
+    name: "Replace all O's with 0's",
+    description: "Replace all O's with 0's (Oh's to zero's)",
+    validation: ({ text }) => {
+      const includesO = text.includes("o");
+      const includesZero = text.includes("0");
+
+      const occurrences = getMatches(text, ["o"]);
+
+      return occurrences.length === 0 ? true : includesO && includesZero;
     },
   },
   {
@@ -315,96 +405,6 @@ export const Rules: RuleStore = [
       return occurrences.length === 0
         ? true
         : includesCapitalChar && includesLowercaseChar;
-    },
-  },
-  {
-    name: "Capitalize a random letter - 3",
-    description: `Must capitalize all ${new Date()
-      .toLocaleDateString("en-US", {
-        month: "long",
-        timeZone: "America/New_York",
-      })[2]
-      .toUpperCase()}'s`,
-    validation: ({ text }) => {
-      // get the current month and return the 1st letter of the month
-      const char = new Date().toLocaleDateString("en-US", {
-        month: "long",
-        timeZone: "America/New_York",
-      })[2];
-      const includesCapitalChar = text.includes(char.toUpperCase());
-      const includesLowercaseChar = !text.includes(char.toLowerCase());
-
-      const occurrences = getMatches(text, [char]);
-
-      return occurrences.length === 0
-        ? true
-        : includesCapitalChar && includesLowercaseChar;
-    },
-  },
-  {
-    name: "Include a word with a letter - 1",
-    description:
-      "Add 3 english words with the letter 'X' in it. Hint: See console :)",
-    validation: ({ text }) => {
-      const words = text.match(/[^ ,\-\n]+/g);
-      const matchingWords = words?.filter((word) =>
-        wordsWithX.includes(word.toLowerCase())
-      );
-      const isPassing = matchingWords ? matchingWords.length >= 3 : false;
-      if (!isPassing) {
-        // if there are no matching words, log "none", otherwise log the matching words
-        console.log(`Words that count: ${matchingWords?.toString() || "none"}`);
-      }
-      return isPassing;
-    },
-  },
-  {
-    name: "Include a word with a letter - 2",
-    description:
-      "Add 2 english words with the letter 'J' in it. Hint: See console :)",
-    validation: ({ text }) => {
-      // use the wordsWithY array
-      const words = text.match(/[^ ,\-\n]+/g);
-      const matchingWords = words?.filter((word) =>
-        wordsWithJ.includes(word.toLowerCase())
-      );
-      const isPassing = matchingWords ? matchingWords.length >= 2 : false;
-      if (!isPassing) {
-        // if there are no matching words, log "none", otherwise log the matching words
-        console.log(`Words that count: ${matchingWords?.toString() || "none"}`);
-      }
-      return isPassing;
-    },
-  },
-  {
-    name: "Include a word with a letter - 3",
-    description:
-      "Add 1 english word with the letter 'Z' in it. Hint: See console :)",
-    validation: ({ text }) => {
-      // use the wordsWithZ array
-      const words = text.match(/[^ ,\-\n]+/g);
-
-      const matchingWords = words?.filter((word) =>
-        wordsWithZ.includes(word.toLowerCase())
-      );
-      const isPassing = matchingWords ? matchingWords.length >= 1 : false;
-      if (!isPassing) {
-        // if there are no matching words, log "none", otherwise log the matching words
-        console.log(`Words that count: ${matchingWords?.toString() || "none"}`);
-      }
-      return isPassing;
-    },
-  },
-  {
-    name: "Replace all O's with 0's",
-    description: "Replace all O's with 0's (Oh's to zero's)",
-    validation: ({ text }) => {
-      const includesO = text.includes("o");
-      const includesZero = text.includes("0");
-
-      const occurrences = getMatches(text, ["o"]);
-
-      return occurrences.length === 0 ? true : includesO && includesZero;
     },
   },
 ];
