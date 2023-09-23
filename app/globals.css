@@ -17,11 +17,13 @@
 }
 
 body {
+  /* add dotted background */
+  background: rgb(var(--background-start-rgb));
+  background-image: radial-gradient(
+    rgba(var(--foreground-rgb), 0.2) 1px,
+    transparent 0
+  );
+  background-size: 15px 15px;
+  background-position: -19px -19px;
   color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
 }
