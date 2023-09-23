@@ -22,6 +22,10 @@ type OnChange = NonNullable<ReactQuill.ReactQuillProps["onChange"]>;
 type OnChangeParams = Parameters<OnChange>;
 export type DeltaStatic = OnChangeParams[1];
 import createDebouce from "../helpers/debouce";
+import debounce from "../helpers/debouce";
+import { Id } from "@/convex/_generated/dataModel";
+import { useMutation } from "convex/react";
+import { api } from "@/convex/_generated/api";
 
 interface TextEditorProps extends ReactQuillProps {
   slug: string;
@@ -35,6 +39,9 @@ interface TextEditorProps extends ReactQuillProps {
   textDelta: string;
   setTextDelta: React.Dispatch<React.SetStateAction<string>>;
   setIsLoaded: React.Dispatch<React.SetStateAction<boolean>>;
+  slugId?: Id<"slugs"> | undefined;
+  passedRules: Rule[];
+  failedRules: Rule[];
 }
 
 export default function TextEditor(props: TextEditorProps) {
@@ -50,6 +57,9 @@ export default function TextEditor(props: TextEditorProps) {
     setTextDelta,
     textDelta,
     setIsLoaded,
+    slugId,
+    passedRules,
+    failedRules,
   } = props;
 
   const [provider, setProvider] = useState<WebrtcProviderType>();
@@ -120,6 +130,9 @@ export default function TextEditor(props: TextEditorProps) {
         textDelta={textDelta}
         setTextDelta={setTextDelta}
         setIsLoaded={setIsLoaded}
+        slugId={slugId}
+        passedRules={passedRules}
+        failedRules={failedRules}
       />
     </div>
   );
@@ -136,6 +149,9 @@ type EditorProps = {
   textDelta: string;
   setTextDelta: React.Dispatch<React.SetStateAction<string>>;
   setIsLoaded: React.Dispatch<React.SetStateAction<boolean>>;
+  slugId?: Id<"slugs"> | undefined;
+  passedRules: Rule[];
+  failedRules: Rule[];
 };
 
 function QuillEditor(props: EditorProps) {
@@ -150,9 +166,14 @@ function QuillEditor(props: EditorProps) {
     textDelta,
     setTextDelta,
     setIsLoaded,
+    slugId,
+    passedRules,
+    failedRules,
   } = props;
   const reactQuillRef = useRef<ReactQuill>(null);
   const debounceRef = useRef<ReturnType<typeof debounce>>();
+  const updateSlugRef = useRef<ReturnType<typeof debounce>>();
+  const updateSlug = useMutation(api.slugs.updateSlug);
   // Set up Yjs and Quill
   useEffect(() => {
     if (!reactQuillRef.current) {
@@ -162,8 +183,6 @@ function QuillEditor(props: EditorProps) {
     const quill = reactQuillRef.current.getEditor();
     const binding = new QuillBinding(yText, quill, provider.awareness);
     if (provider?.room?.bcConns.size === 0) {
-      // yText.insert(0, "abcde");
-      console.log("textDelta", textDelta);
       quill.setText(textDelta || "");
     }
 
@@ -203,7 +222,19 @@ function QuillEditor(props: EditorProps) {
         setIsCompleted,
         setIsLoaded,
       });
-    }, 500);
+    }, 1000);
+
+    updateSlugRef.current = createDebouce(async (source: Sources) => {
+      if (slugId && source === "user") {
+        await updateSlug({
+          id: slugId,
+          docText: reactQuillRef.current?.getEditor().getText() || "",
+          passedTests: passedRules.length,
+          failedTests: failedRules.length,
+          endTime: Date.now(),
+        });
+      }
+    }, 1000);
   }, []);
 
   return (
@@ -232,12 +263,17 @@ function QuillEditor(props: EditorProps) {
           onChange={(
             _value: string,
             _delta: DeltaStatic,
-            _source: Sources,
+            source: Sources,
             editor: ReactQuill.UnprivilegedEditor
           ) => {
-            setTextDelta(editor.getText());
             setIsLoaded(false);
+            setTextDelta(editor.getText());
+            // debounce()
             debounceRef.current?.();
+            if (source === "user") {
+              // pass in source to the updateSlugRef as arg
+              updateSlugRef.current?.(source);
+            }
           }}
         />
       </div>
