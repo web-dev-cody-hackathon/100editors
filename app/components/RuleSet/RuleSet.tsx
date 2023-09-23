@@ -24,7 +24,6 @@ export default function RuleSet(props: RuleSetProps) {
         Rules (Passed: {passedRules.length} of{" "}
         {passedRules.length + failedRules.length})
       </h3>
-      {/* min height  */}
       <div className="h-[10px] mt-1">
         <PacmanLoader
           color={"#36d7b7"}
