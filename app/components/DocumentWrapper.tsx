@@ -3,7 +3,7 @@ import RuleSet from "./RuleSet/RuleSet";
 import TextEditor from "./TextEditor";
 import { Rule } from "./RuleSet/Rules";
 import { api } from "@/convex/_generated/api";
-import { useMutation, useQuery } from "convex/react";
+import { useMutation } from "convex/react";
 import { Id } from "@/convex/_generated/dataModel";
 import * as Y from "yjs";
 
@@ -16,13 +16,23 @@ interface DocumentWrapperProps {
   textDelta: string;
   setTextDelta: Dispatch<SetStateAction<string>>;
 }
+
 export default function DocumentWrapper(props: DocumentWrapperProps) {
   const updateSlug = useMutation(api.slugs.updateSlug);
+
   const { slug, slugId, setUsersInRoom, textDelta, setTextDelta } = props;
   const [passedRules, setPassedRules] = useState<Rule[]>([]);
   const [failedRules, setFailedRules] = useState<Rule[]>([]);
   const [isCompleted, setIsCompleted] = useState<boolean>(false);
   const [text, setText] = useState<Y.Text>();
+
+  const { slug, slugId, setUsersInRoom, textDelta, setTextDelta } = props;
+  const [passedRules, setPassedRules] = useState<Rule[]>([]);
+  const [failedRules, setFailedRules] = useState<Rule[]>([]);
+  const [isCompleted, setIsCompleted] = useState<boolean>(false);
+  const [isLoaded, setIsLoaded] = useState<boolean>(false);
+  const [text, setText] = useState<Y.Text>();
+
 
   useEffect(() => {
     if (slugId) {
@@ -51,8 +61,13 @@ export default function DocumentWrapper(props: DocumentWrapperProps) {
         setText={setText}
         setTextDelta={setTextDelta}
         textDelta={textDelta}
+        setIsLoaded={setIsLoaded}
       />
-      <RuleSet passedRules={passedRules} failedRules={failedRules} />
+      <RuleSet
+        passedRules={passedRules}
+        failedRules={failedRules}
+        isLoaded={isLoaded}
+      />
     </div>
   );
 }

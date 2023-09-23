@@ -21,6 +21,7 @@ import { Sources } from "quill";
 type OnChange = NonNullable<ReactQuill.ReactQuillProps["onChange"]>;
 type OnChangeParams = Parameters<OnChange>;
 export type DeltaStatic = OnChangeParams[1];
+import createDebouce from "../helpers/debouce";
 
 interface TextEditorProps extends ReactQuillProps {
   slug: string;
@@ -33,6 +34,7 @@ interface TextEditorProps extends ReactQuillProps {
   setText: React.Dispatch<React.SetStateAction<Y.Text | undefined>>;
   textDelta: string;
   setTextDelta: React.Dispatch<React.SetStateAction<string>>;
+  setIsLoaded: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export default function TextEditor(props: TextEditorProps) {
@@ -47,6 +49,7 @@ export default function TextEditor(props: TextEditorProps) {
     setText,
     setTextDelta,
     textDelta,
+    setIsLoaded,
   } = props;
 
   const [provider, setProvider] = useState<WebrtcProviderType>();
@@ -116,6 +119,7 @@ export default function TextEditor(props: TextEditorProps) {
         slug={slug}
         textDelta={textDelta}
         setTextDelta={setTextDelta}
+        setIsLoaded={setIsLoaded}
       />
     </div>
   );
@@ -131,6 +135,7 @@ type EditorProps = {
   isCompleted: boolean;
   textDelta: string;
   setTextDelta: React.Dispatch<React.SetStateAction<string>>;
+  setIsLoaded: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 function QuillEditor(props: EditorProps) {
@@ -144,8 +149,10 @@ function QuillEditor(props: EditorProps) {
     isCompleted,
     textDelta,
     setTextDelta,
+    setIsLoaded,
   } = props;
   const reactQuillRef = useRef<ReactQuill>(null);
+  const debounceRef = useRef<ReturnType<typeof debounce>>();
   // Set up Yjs and Quill
   useEffect(() => {
     if (!reactQuillRef.current) {
@@ -181,15 +188,22 @@ function QuillEditor(props: EditorProps) {
       setFailedRules,
       setPassedRules,
       setIsCompleted,
+      setIsLoaded,
     });
   }, [setFailedRules, setIsCompleted, setPassedRules]);
 
   useEffect(() => {
-    if (!reactQuillRef.current) {
-      return;
-    }
-
-    reactQuillRef.current.focus();
+    debounceRef.current = createDebouce(() => {
+      validateText({
+        text: reactQuillRef.current?.getEditor().getText() || "",
+        slug: slug,
+        rules: Rules,
+        setFailedRules,
+        setPassedRules,
+        setIsCompleted,
+        setIsLoaded,
+      });
+    }, 500);
   }, []);
 
   return (
@@ -221,15 +235,9 @@ function QuillEditor(props: EditorProps) {
             _source: Sources,
             editor: ReactQuill.UnprivilegedEditor
           ) => {
-            validateText({
-              text: editor.getText(),
-              rules: Rules,
-              slug,
-              setFailedRules,
-              setPassedRules,
-              setIsCompleted,
-            });
             setTextDelta(editor.getText());
+            setIsLoaded(false);
+            debounceRef.current?.();
           }}
         />
       </div>
