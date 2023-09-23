@@ -1,14 +1,22 @@
-import { ReactElement } from "react";
+import { CSSProperties, ReactElement } from "react";
 import { Rule } from "./Rules";
 import { BsFillEmojiAngryFill, BsFillEmojiHeartEyesFill } from "react-icons/bs";
+import PacmanLoader from "react-spinners/PacmanLoader";
 
 interface RuleSetProps {
   passedRules: Rule[];
   failedRules: Rule[];
+  isLoaded: boolean;
 }
 
+const spinnerStyle: CSSProperties = {
+  display: "block",
+  margin: "0 auto",
+  borderColor: "red",
+};
+
 export default function RuleSet(props: RuleSetProps) {
-  const { passedRules, failedRules } = props;
+  const { passedRules, failedRules, isLoaded } = props;
 
   return (
     <div className="flex flex-col items-center align-items h-[76vh] ">
@@ -16,6 +24,16 @@ export default function RuleSet(props: RuleSetProps) {
         Rules (Passed: {passedRules.length} of{" "}
         {passedRules.length + failedRules.length})
       </h3>
+      <div className="h-[10px] mt-1">
+        <PacmanLoader
+          color={"#36d7b7"}
+          loading={!isLoaded}
+          cssOverride={spinnerStyle}
+          size={10}
+          aria-label="Loading Spinner"
+          data-testid="loader"
+        />
+      </div>
       <div className="min-w-[20vw] p-6 min-h-[60vh] max-w-[20vw] overflow-y-auto scrollbar scrollbar-thumb-gray-900 scrollbar-track-gray-100">
         <CardList
           rules={failedRules}
