@@ -11,12 +11,11 @@ import type { Dispatch, SetStateAction } from "react";
 interface DocumentWrapperProps {
   slug: string;
   slugId: Id<"slugs"> | undefined;
-  usersInRoom: string[];
   setUsersInRoom: Dispatch<SetStateAction<string[]>>;
 }
 export default function DocumentWrapper(props: DocumentWrapperProps) {
   const updateSlug = useMutation(api.slugs.updateSlug);
-  const { slug, slugId, usersInRoom, setUsersInRoom } = props;
+  const { slug, slugId, setUsersInRoom } = props;
   const [passedRules, setPassedRules] = useState<Rule[]>([]);
   const [failedRules, setFailedRules] = useState<Rule[]>([]);
   const [isCompleted, setIsCompleted] = useState<boolean>(false);
@@ -36,19 +35,19 @@ export default function DocumentWrapper(props: DocumentWrapperProps) {
 
   return (
     <div className="flex justify-center content-center flex-row gap-5">
-      {/* show 'loading...' if loading, else show 'loaded' */}
-      {isLoaded ? <h2>loaded</h2> : <h2>loading...</h2>}
-
       <TextEditor
         slug={slug}
         setPassedRules={setPassedRules}
         setFailedRules={setFailedRules}
         setIsCompleted={setIsCompleted}
         setUsersInRoom={setUsersInRoom}
-        usersInRoom={usersInRoom}
         setIsLoaded={setIsLoaded}
       />
-      <RuleSet passedRules={passedRules} failedRules={failedRules} />
+      <RuleSet
+        passedRules={passedRules}
+        failedRules={failedRules}
+        isLoaded={isLoaded}
+      />
     </div>
   );
 }

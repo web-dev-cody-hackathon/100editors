@@ -19,7 +19,6 @@ import { api } from "@/convex/_generated/api";
 
 import "./textEditor.css";
 import "react-quill/dist/quill.core.css";
-import { Sources } from "quill";
 import debounce from "../helpers/debouce";
 import createDebouce from "../helpers/debouce";
 
@@ -29,7 +28,6 @@ interface TextEditorProps extends ReactQuillProps {
   setFailedRules: React.Dispatch<React.SetStateAction<Rule[]>>;
   setIsCompleted: React.Dispatch<React.SetStateAction<boolean>>;
   setUsersInRoom: React.Dispatch<React.SetStateAction<string[]>>;
-  usersInRoom: string[];
   setIsLoaded: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -40,7 +38,6 @@ export default function TextEditor(props: TextEditorProps) {
     setIsCompleted,
     slug,
     setUsersInRoom,
-    usersInRoom,
     setIsLoaded,
   } = props;
   const [text, setText] = useState<Y.Text>();
@@ -207,12 +204,7 @@ function QuillEditor(props: EditorProps) {
               userOnly: true,
             },
           }}
-          onChange={(
-            _value: string,
-            _delta: any,
-            _source: Sources,
-            editor: ReactQuill.UnprivilegedEditor
-          ) => {
+          onChange={() => {
             setIsLoaded(false);
             debounceRef.current?.();
           }}

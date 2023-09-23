@@ -5,10 +5,11 @@ import { BsFillEmojiAngryFill, BsFillEmojiHeartEyesFill } from "react-icons/bs";
 interface RuleSetProps {
   passedRules: Rule[];
   failedRules: Rule[];
+  isLoaded: boolean;
 }
 
 export default function RuleSet(props: RuleSetProps) {
-  const { passedRules, failedRules } = props;
+  const { passedRules, failedRules, isLoaded } = props;
 
   return (
     <div className="flex flex-col items-center align-items h-[76vh] ">
