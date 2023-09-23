@@ -3,7 +3,7 @@ import RuleSet from "./RuleSet/RuleSet";
 import TextEditor from "./TextEditor";
 import { Rule } from "./RuleSet/Rules";
 import { api } from "@/convex/_generated/api";
-import { useMutation, useQuery } from "convex/react";
+import { useMutation } from "convex/react";
 import { Id } from "@/convex/_generated/dataModel";
 
 import type { Dispatch, SetStateAction } from "react";
@@ -11,15 +11,15 @@ import type { Dispatch, SetStateAction } from "react";
 interface DocumentWrapperProps {
   slug: string;
   slugId: Id<"slugs"> | undefined;
-  usersInRoom: string[];
   setUsersInRoom: Dispatch<SetStateAction<string[]>>;
 }
 export default function DocumentWrapper(props: DocumentWrapperProps) {
   const updateSlug = useMutation(api.slugs.updateSlug);
-  const { slug, slugId, usersInRoom, setUsersInRoom } = props;
+  const { slug, slugId, setUsersInRoom } = props;
   const [passedRules, setPassedRules] = useState<Rule[]>([]);
   const [failedRules, setFailedRules] = useState<Rule[]>([]);
   const [isCompleted, setIsCompleted] = useState<boolean>(false);
+  const [isLoaded, setIsLoaded] = useState<boolean>(false);
 
   useEffect(() => {
     if (slugId) {
@@ -41,9 +41,13 @@ export default function DocumentWrapper(props: DocumentWrapperProps) {
         setFailedRules={setFailedRules}
         setIsCompleted={setIsCompleted}
         setUsersInRoom={setUsersInRoom}
-        usersInRoom={usersInRoom}
+        setIsLoaded={setIsLoaded}
       />
-      <RuleSet passedRules={passedRules} failedRules={failedRules} />
+      <RuleSet
+        passedRules={passedRules}
+        failedRules={failedRules}
+        isLoaded={isLoaded}
+      />
     </div>
   );
 }
