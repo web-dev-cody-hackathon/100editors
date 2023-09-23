@@ -20,7 +20,6 @@ export const validateText = (props: ValidateTextProps) => {
     slug,
     setIsLoaded,
   } = props;
-  console.log("validateText", text);
 
   const failedRules: Rule[] = [];
   const passedRules: Rule[] = [];

@@ -3,7 +3,7 @@ import RuleSet from "./RuleSet/RuleSet";
 import TextEditor from "./TextEditor";
 import { Rule } from "./RuleSet/Rules";
 import { api } from "@/convex/_generated/api";
-import { useMutation, useQuery } from "convex/react";
+import { useMutation } from "convex/react";
 import { Id } from "@/convex/_generated/dataModel";
 
 import type { Dispatch, SetStateAction } from "react";
