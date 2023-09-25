@@ -231,7 +231,7 @@ function QuillEditor(props: EditorProps) {
           docText: reactQuillRef.current?.getEditor().getText() || "",
           passedTests: passedRules.length,
           failedTests: failedRules.length,
-          endTime: Date.now(),
+          endTime: isCompleted ? Date.now() : undefined,
         });
       }
     }, 1000);
