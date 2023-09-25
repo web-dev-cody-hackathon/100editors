@@ -201,7 +201,7 @@ function QuillEditor(props: EditorProps) {
 
   useEffect(() => {
     validateText({
-      text: "",
+      text: reactQuillRef.current?.getEditor().getText() || "",
       slug: slug,
       rules: Rules,
       setFailedRules,
@@ -268,10 +268,10 @@ function QuillEditor(props: EditorProps) {
           ) => {
             setIsLoaded(false);
             setTextDelta(editor.getText());
+
             // debounce()
             debounceRef.current?.();
             if (source === "user") {
-              // pass in source to the updateSlugRef as arg
               updateSlugRef.current?.(source);
             }
           }}
