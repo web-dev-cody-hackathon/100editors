@@ -182,9 +182,6 @@ function QuillEditor(props: EditorProps) {
 
     const quill = reactQuillRef.current.getEditor();
     const binding = new QuillBinding(yText, quill, provider.awareness);
-    if (provider?.room?.bcConns.size === 0) {
-      quill.setText(textDelta);
-    }
 
     return () => {
       binding.destroy();
