@@ -5,6 +5,7 @@ import { Rule } from "./RuleSet/Rules";
 import { api } from "@/convex/_generated/api";
 import { useMutation } from "convex/react";
 import { Id } from "@/convex/_generated/dataModel";
+import * as Y from "yjs";
 
 import type { Dispatch, SetStateAction } from "react";
 
@@ -12,26 +13,17 @@ interface DocumentWrapperProps {
   slug: string;
   slugId: Id<"slugs"> | undefined;
   setUsersInRoom: Dispatch<SetStateAction<string[]>>;
+  textDelta: string;
+  setTextDelta: Dispatch<SetStateAction<string>>;
 }
+
 export default function DocumentWrapper(props: DocumentWrapperProps) {
-  const updateSlug = useMutation(api.slugs.updateSlug);
-  const { slug, slugId, setUsersInRoom } = props;
+  const { slug, slugId, setUsersInRoom, textDelta, setTextDelta } = props;
   const [passedRules, setPassedRules] = useState<Rule[]>([]);
   const [failedRules, setFailedRules] = useState<Rule[]>([]);
   const [isCompleted, setIsCompleted] = useState<boolean>(false);
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
-
-  useEffect(() => {
-    if (slugId) {
-      updateSlug({
-        id: slugId,
-        passedTests: passedRules.length,
-        failedTests: failedRules.length,
-        endTime: isCompleted ? Date.now() : undefined,
-      });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [passedRules, failedRules]);
+  const [text, setText] = useState<Y.Text>();
 
   return (
     <div className="flex justify-center content-center flex-row gap-5">
@@ -41,7 +33,15 @@ export default function DocumentWrapper(props: DocumentWrapperProps) {
         setFailedRules={setFailedRules}
         setIsCompleted={setIsCompleted}
         setUsersInRoom={setUsersInRoom}
+        isCompleted={isCompleted}
+        text={text}
+        setText={setText}
+        setTextDelta={setTextDelta}
+        textDelta={textDelta}
         setIsLoaded={setIsLoaded}
+        slugId={slugId}
+        passedRules={passedRules}
+        failedRules={failedRules}
       />
       <RuleSet
         passedRules={passedRules}

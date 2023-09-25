@@ -17,8 +17,15 @@ import { validateText } from "./RuleSet/RuleValidation";
 
 import "./textEditor.css";
 import "react-quill/dist/quill.core.css";
-import debounce from "../helpers/debouce";
+import { Sources } from "quill";
+type OnChange = NonNullable<ReactQuill.ReactQuillProps["onChange"]>;
+type OnChangeParams = Parameters<OnChange>;
+export type DeltaStatic = OnChangeParams[1];
 import createDebouce from "../helpers/debouce";
+import debounce from "../helpers/debouce";
+import { Id } from "@/convex/_generated/dataModel";
+import { useMutation } from "convex/react";
+import { api } from "@/convex/_generated/api";
 
 interface TextEditorProps extends ReactQuillProps {
   slug: string;
@@ -26,7 +33,15 @@ interface TextEditorProps extends ReactQuillProps {
   setFailedRules: React.Dispatch<React.SetStateAction<Rule[]>>;
   setIsCompleted: React.Dispatch<React.SetStateAction<boolean>>;
   setUsersInRoom: React.Dispatch<React.SetStateAction<string[]>>;
+  isCompleted: boolean;
+  text: Y.Text | undefined;
+  setText: React.Dispatch<React.SetStateAction<Y.Text | undefined>>;
+  textDelta: string;
+  setTextDelta: React.Dispatch<React.SetStateAction<string>>;
   setIsLoaded: React.Dispatch<React.SetStateAction<boolean>>;
+  slugId?: Id<"slugs"> | undefined;
+  passedRules: Rule[];
+  failedRules: Rule[];
 }
 
 export default function TextEditor(props: TextEditorProps) {
@@ -36,9 +51,17 @@ export default function TextEditor(props: TextEditorProps) {
     setIsCompleted,
     slug,
     setUsersInRoom,
+    isCompleted,
+    text,
+    setText,
+    setTextDelta,
+    textDelta,
     setIsLoaded,
+    slugId,
+    passedRules,
+    failedRules,
   } = props;
-  const [text, setText] = useState<Y.Text>();
+
   const [provider, setProvider] = useState<WebrtcProviderType>();
 
   useEffect(() => {
@@ -53,16 +76,17 @@ export default function TextEditor(props: TextEditorProps) {
       ],
       maxConns: 75 + Math.floor(Math.random() * 15),
     });
+
     // log when a user joins or leaves
     yProvider.awareness.on(
       "change",
       ({
         added,
-        updated,
+        _updated,
         removed,
       }: {
         added: string[];
-        updated: string[];
+        _updated: string[];
         removed: string[];
       }) => {
         setUsersInRoom((prev) => {
@@ -101,8 +125,14 @@ export default function TextEditor(props: TextEditorProps) {
         setFailedRules={setFailedRules}
         setPassedRules={setPassedRules}
         setIsCompleted={setIsCompleted}
+        isCompleted={isCompleted}
         slug={slug}
+        textDelta={textDelta}
+        setTextDelta={setTextDelta}
         setIsLoaded={setIsLoaded}
+        slugId={slugId}
+        passedRules={passedRules}
+        failedRules={failedRules}
       />
     </div>
   );
@@ -115,7 +145,13 @@ type EditorProps = {
   setFailedRules: React.Dispatch<React.SetStateAction<Rule[]>>;
   setIsCompleted: React.Dispatch<React.SetStateAction<boolean>>;
   slug: string;
+  isCompleted: boolean;
+  textDelta: string;
+  setTextDelta: React.Dispatch<React.SetStateAction<string>>;
   setIsLoaded: React.Dispatch<React.SetStateAction<boolean>>;
+  slugId?: Id<"slugs"> | undefined;
+  passedRules: Rule[];
+  failedRules: Rule[];
 };
 
 function QuillEditor(props: EditorProps) {
@@ -126,10 +162,18 @@ function QuillEditor(props: EditorProps) {
     setFailedRules,
     setIsCompleted,
     slug,
+    isCompleted,
+    textDelta,
+    setTextDelta,
     setIsLoaded,
+    slugId,
+    passedRules,
+    failedRules,
   } = props;
   const reactQuillRef = useRef<ReactQuill>(null);
   const debounceRef = useRef<ReturnType<typeof debounce>>();
+  const updateSlugRef = useRef<ReturnType<typeof debounce>>();
+  const updateSlug = useMutation(api.slugs.updateSlug);
   // Set up Yjs and Quill
   useEffect(() => {
     if (!reactQuillRef.current) {
@@ -138,6 +182,9 @@ function QuillEditor(props: EditorProps) {
 
     const quill = reactQuillRef.current.getEditor();
     const binding = new QuillBinding(yText, quill, provider.awareness);
+    if (provider?.room?.bcConns.size === 0) {
+      quill.setText(textDelta || "");
+    }
 
     return () => {
       binding.destroy();
@@ -154,7 +201,7 @@ function QuillEditor(props: EditorProps) {
 
   useEffect(() => {
     validateText({
-      text: "",
+      text: reactQuillRef.current?.getEditor().getText() || "",
       slug: slug,
       rules: Rules,
       setFailedRules,
@@ -175,7 +222,19 @@ function QuillEditor(props: EditorProps) {
         setIsCompleted,
         setIsLoaded,
       });
-    }, 500);
+    }, 1000);
+
+    updateSlugRef.current = createDebouce(async (source: Sources) => {
+      if (slugId && source === "user") {
+        await updateSlug({
+          id: slugId,
+          docText: reactQuillRef.current?.getEditor().getText() || "",
+          passedTests: passedRules.length,
+          failedTests: failedRules.length,
+          endTime: Date.now(),
+        });
+      }
+    }, 1000);
   }, []);
 
   return (
@@ -184,6 +243,7 @@ function QuillEditor(props: EditorProps) {
         <ReactQuill
           className="h-full w-full block px-0 text-sm text-gray-800 bg-white border-0 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 focus:ring-0 focus:ring-offset-0"
           ref={reactQuillRef}
+          readOnly={isCompleted}
           modules={{
             toolbar: false,
             cursors: {
@@ -200,9 +260,20 @@ function QuillEditor(props: EditorProps) {
               userOnly: true,
             },
           }}
-          onChange={() => {
+          onChange={(
+            _value: string,
+            _delta: DeltaStatic,
+            source: Sources,
+            editor: ReactQuill.UnprivilegedEditor
+          ) => {
             setIsLoaded(false);
+            setTextDelta(editor.getText());
+
+            // debounce()
             debounceRef.current?.();
+            if (source === "user") {
+              updateSlugRef.current?.(source);
+            }
           }}
         />
       </div>
