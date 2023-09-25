@@ -196,6 +196,19 @@ function QuillEditor(props: EditorProps) {
       return;
     }
 
+    console.log("textDelta:", textDelta);
+
+    const quill = reactQuillRef.current.getEditor();
+    if (provider?.room?.bcConns.size === 0) {
+      quill.setText(textDelta);
+    }
+  }, [textDelta]);
+
+  useEffect(() => {
+    if (!reactQuillRef.current) {
+      return;
+    }
+
     reactQuillRef.current.focus();
   }, []);
 
