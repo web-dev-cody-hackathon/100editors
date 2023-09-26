@@ -16,6 +16,7 @@ export interface Rule {
   description: string;
   validation: (text: string, slug?: string) => boolean;
   completed?: boolean;
+  isPassing?: boolean;
 }
 
 interface RuleStore extends Array<Rule> {}

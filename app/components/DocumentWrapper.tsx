@@ -21,6 +21,7 @@ export default function DocumentWrapper(props: DocumentWrapperProps) {
   const { slug, slugId, setUsersInRoom, textDelta, setTextDelta } = props;
   const [passedRules, setPassedRules] = useState<Rule[]>([]);
   const [failedRules, setFailedRules] = useState<Rule[]>([]);
+  const [attemptedRules, setAttemptedRules] = useState<Rule[]>([]);
   const [isCompleted, setIsCompleted] = useState<boolean>(false);
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
   const [text, setText] = useState<Y.Text>();
@@ -42,10 +43,12 @@ export default function DocumentWrapper(props: DocumentWrapperProps) {
         slugId={slugId}
         passedRules={passedRules}
         failedRules={failedRules}
+        setAttemptedRules={setAttemptedRules}
       />
       <RuleSet
         passedRules={passedRules}
         failedRules={failedRules}
+        attemptedRules={attemptedRules}
         isLoaded={isLoaded}
       />
     </div>
