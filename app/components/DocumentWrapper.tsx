@@ -44,6 +44,7 @@ export default function DocumentWrapper(props: DocumentWrapperProps) {
         passedRules={passedRules}
         failedRules={failedRules}
         setAttemptedRules={setAttemptedRules}
+        attemptedRules={attemptedRules}
       />
       <RuleSet
         passedRules={passedRules}

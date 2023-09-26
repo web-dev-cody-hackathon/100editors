@@ -43,6 +43,7 @@ interface TextEditorProps extends ReactQuillProps {
   passedRules: Rule[];
   failedRules: Rule[];
   setAttemptedRules: React.Dispatch<React.SetStateAction<Rule[]>>;
+  attemptedRules: Rule[];
 }
 
 export default function TextEditor(props: TextEditorProps) {
@@ -62,6 +63,7 @@ export default function TextEditor(props: TextEditorProps) {
     passedRules,
     failedRules,
     setAttemptedRules,
+    attemptedRules,
   } = props;
 
   const [provider, setProvider] = useState<WebrtcProviderType>();
@@ -135,6 +137,7 @@ export default function TextEditor(props: TextEditorProps) {
         slugId={slugId}
         passedRules={passedRules}
         failedRules={failedRules}
+        setAttemptedRules={setAttemptedRules}
       />
     </div>
   );
@@ -155,6 +158,7 @@ type EditorProps = {
   passedRules: Rule[];
   failedRules: Rule[];
   setAttemptedRules: React.Dispatch<React.SetStateAction<Rule[]>>;
+  attemptedRules: Rule[];
 };
 
 function QuillEditor(props: EditorProps) {
@@ -173,6 +177,7 @@ function QuillEditor(props: EditorProps) {
     passedRules,
     failedRules,
     setAttemptedRules,
+    attemptedRules,
   } = props;
   const reactQuillRef = useRef<ReactQuill>(null);
   const debounceRef = useRef<ReturnType<typeof debounce>>();
@@ -223,6 +228,7 @@ function QuillEditor(props: EditorProps) {
       setIsCompleted,
       setIsLoaded,
       setAttemptedRules,
+      attemptedRules,
     });
   }, [setFailedRules, setIsCompleted, setPassedRules]);
 
@@ -237,6 +243,7 @@ function QuillEditor(props: EditorProps) {
         setIsCompleted,
         setIsLoaded,
         setAttemptedRules,
+        attemptedRules,
       });
     }, 1000);
 
