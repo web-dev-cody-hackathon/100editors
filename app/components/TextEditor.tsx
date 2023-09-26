@@ -278,7 +278,7 @@ function QuillEditor(props: EditorProps) {
           ) => {
             setIsLoaded(false);
             // TODO: fix this
-            setTextDelta(editor.getText());
+            // setTextDelta(editor.getText());
 
             // debounce()
             debounceRef.current?.();
