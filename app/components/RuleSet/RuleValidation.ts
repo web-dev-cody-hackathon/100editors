@@ -43,12 +43,8 @@ export const validateText = (props: ValidateTextProps) => {
       rule.attempted = true;
       if (!rule.validation(text, slug)) {
         rule.completed = false;
-        // rule.isPassing = false;
-        // failedRules.push(rule);
       } else {
         rule.completed = true;
-        // rule.isPassing = true;
-        // passedRules.push(rule);
       }
 
       // sort failing a the top, passing at the bottom
