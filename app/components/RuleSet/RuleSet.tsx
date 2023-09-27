@@ -18,6 +18,7 @@ const spinnerStyle: CSSProperties = {
 
 export default function RuleSet(props: RuleSetProps) {
   const { passedRules, failedRules, isLoaded, attemptedRules } = props;
+  console.log("attempted rules", { attemptedRules, passedRules, failedRules });
 
   return (
     <div className="flex flex-col items-center align-items h-[76vh] ">

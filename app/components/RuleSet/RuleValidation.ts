@@ -9,6 +9,7 @@ interface ValidateTextProps {
   slug: string;
   setIsLoaded: React.Dispatch<React.SetStateAction<boolean>>;
   setAttemptedRules: React.Dispatch<React.SetStateAction<Rule[]>>;
+  attemptedRules: Rule[];
 }
 
 export const validateText = (props: ValidateTextProps) => {
@@ -21,6 +22,7 @@ export const validateText = (props: ValidateTextProps) => {
     slug,
     setIsLoaded,
     setAttemptedRules,
+    attemptedRules,
   } = props;
 
   const failedRules: Rule[] = [];
@@ -31,20 +33,22 @@ export const validateText = (props: ValidateTextProps) => {
     failedRules.push(rules[0]);
   } else {
     for (let i = 0; i < rules.length; i++) {
+      const rule = rules[i];
       const prevRule = rules[i - 1];
+
       if (prevRule && !prevRule.completed) {
         break;
       }
 
-      const rule = rules[i];
+      rule.attempted = true;
       if (!rule.validation(text, slug)) {
         rule.completed = false;
-        rule.isPassing = false;
-        failedRules.push(rule);
+        // rule.isPassing = false;
+        // failedRules.push(rule);
       } else {
         rule.completed = true;
-        rule.isPassing = true;
-        passedRules.push(rule);
+        // rule.isPassing = true;
+        // passedRules.push(rule);
       }
 
       // sort failing a the top, passing at the bottom
@@ -61,6 +65,19 @@ export const validateText = (props: ValidateTextProps) => {
             }
           })
       );
+    }
+
+    for (let i = 0; i < rules.length; i++) {
+      const rule = rules[i];
+      if (rule.attempted) {
+        if (!rule.validation(text, slug)) {
+          rule.isPassing = false;
+          failedRules.push(rule);
+        } else {
+          rule.isPassing = true;
+          passedRules.push(rule);
+        }
+      }
     }
   }
 

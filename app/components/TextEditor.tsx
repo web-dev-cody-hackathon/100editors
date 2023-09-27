@@ -202,8 +202,6 @@ function QuillEditor(props: EditorProps) {
       return;
     }
 
-    console.log("textDelta:", textDelta);
-
     const quill = reactQuillRef.current.getEditor();
     if (provider?.room?.bcConns.size === 0) {
       quill.setText(textDelta);
