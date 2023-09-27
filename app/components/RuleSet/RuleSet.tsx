@@ -7,7 +7,6 @@ interface RuleSetProps {
   passedRules: Rule[];
   failedRules: Rule[];
   isLoaded: boolean;
-  attemptedRules: Rule[];
 }
 
 const spinnerStyle: CSSProperties = {
@@ -17,7 +16,7 @@ const spinnerStyle: CSSProperties = {
 };
 
 export default function RuleSet(props: RuleSetProps) {
-  const { passedRules, failedRules, isLoaded, attemptedRules } = props;
+  const { passedRules, failedRules, isLoaded } = props;
 
   return (
     <div className="flex flex-col items-center align-items h-[76vh] ">
@@ -36,7 +35,16 @@ export default function RuleSet(props: RuleSetProps) {
         />
       </div>
       <div className="min-w-[20vw] p-6 min-h-[60vh] max-w-[20vw] overflow-y-auto scrollbar scrollbar-thumb-gray-900 scrollbar-track-gray-100">
-        <CardList attemptedRules={attemptedRules} />
+        <CardList
+          rules={failedRules}
+          SvgIcon={<BsFillEmojiAngryFill className="text-red-500 h-7 w-7" />}
+        />
+        <CardList
+          rules={passedRules}
+          SvgIcon={
+            <BsFillEmojiHeartEyesFill className="text-green-500 h-7 w-7" />
+          }
+        />
       </div>
     </div>
   );
@@ -58,24 +66,16 @@ function Card({ text, SvgIcon }: CardProps) {
 }
 
 type CardListProps = {
-  attemptedRules: Rule[];
+  rules: Rule[];
+  SvgIcon: ReactElement;
 };
-function CardList({ attemptedRules }: CardListProps) {
+function CardList({ rules, SvgIcon }: CardListProps) {
   return (
     <ul>
-      {attemptedRules.map((rule) => {
+      {rules.map((rule) => {
         return (
           <li key={rule.description} className="flex flex-row py-2">
-            <Card
-              text={rule.description}
-              SvgIcon={
-                rule.isPassing ? (
-                  <BsFillEmojiHeartEyesFill className="text-green-500 h-7 w-7" />
-                ) : (
-                  <BsFillEmojiAngryFill className="text-red-500 h-7 w-7" />
-                )
-              }
-            />
+            <Card text={rule.description} SvgIcon={SvgIcon} />
           </li>
         );
       })}
