@@ -388,30 +388,30 @@ export const Rules: RuleStore = [
     validation: ({ text }) => {
       const sentences = text
         .split(/\.|\!|\?|\n/)
-        .filter((s) => s !== "")
-        .map((s) => s.trim());
+        .filter((sentence) => sentence.trim() !== "")
+        .map((sentence) => sentence.trim());
 
       const alliterationSentences = sentences.filter((sentence) => {
         const words = sentence.split(" ");
         const firstLetter = words[0][0];
         const isAlliteration = words.every(
-          (word) => word[0]?.toLowerCase() === firstLetter.toLowerCase()
+          (word) => word[0]?.toLowerCase() === firstLetter?.toLowerCase()
         );
 
         return isAlliteration;
       });
 
-      const isLongEnough = alliterationSentences.some((sentence) => {
+      const isLongEnough = alliterationSentences?.some((sentence) => {
         const words = sentence.split(" ");
         return words.length >= 10;
       });
 
-      const isPassing = alliterationSentences.length >= 1 && isLongEnough;
+      const isPassing = alliterationSentences?.length >= 1 && isLongEnough;
 
       if (!isPassing) {
         console.log(
           `Alliteration sentences found: ${
-            alliterationSentences.toString() || "none"
+            alliterationSentences?.toString() || "none"
           } ${
             isLongEnough
               ? ""
