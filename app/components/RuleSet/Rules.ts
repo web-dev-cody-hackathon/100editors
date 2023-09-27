@@ -312,18 +312,6 @@ export const Rules: RuleStore = [
     },
   },
   {
-    name: "Replace all O's with 0's",
-    description: "Replace all O's with 0's (Oh's to zero's)",
-    validation: ({ text }) => {
-      const includesO = text.includes("o");
-      const includesZero = text.includes("0");
-
-      const occurrences = getMatches(text, ["o"]);
-
-      return occurrences.length === 0 ? true : includesO && includesZero;
-    },
-  },
-  {
     name: "Min 3 words per line",
     description: "Must have at least 3 words per line",
     validation: ({ text }) => {
