@@ -48,19 +48,7 @@ export const validateText = (props: ValidateTextProps) => {
       }
 
       // sort failing a the top, passing at the bottom
-      setAttemptedRules((prevRules) =>
-        [...prevRules, rule]
-          .filter((rule, index, self) => index === self.indexOf(rule))
-          .sort((a, b) => {
-            if (a.isPassing && !b.isPassing) {
-              return 1;
-            } else if (!a.isPassing && b.isPassing) {
-              return -1;
-            } else {
-              return 0;
-            }
-          })
-      );
+      setAttemptedRules((prevRules) => [...prevRules, rule]);
     }
 
     for (let i = 0; i < rules.length; i++) {
@@ -81,6 +69,24 @@ export const validateText = (props: ValidateTextProps) => {
     setIsCompleted(true);
   }
 
+  // sort and filter out duplicates from the attempted rules
+  setAttemptedRules((prevRules) =>
+    [...prevRules]
+      .filter(
+        (rule, index, self) =>
+          index === self.findIndex((r) => r.name === rule.name)
+      )
+      .sort((a, b) => {
+        // sort based on passed or not. Failed rules should be at the top
+        if (a.isPassing && !b.isPassing) {
+          return 1;
+        } else if (!a.isPassing && b.isPassing) {
+          return -1;
+        } else {
+          return 0;
+        }
+      })
+  );
   setFailedRules(failedRules);
   setPassedRules(passedRules);
   setIsLoaded(true);
