@@ -323,8 +323,8 @@ export const Rules: RuleStore = [
     },
   },
   {
-    name: "Capitalize a random letter - 1",
-    description: `Must capitalize all ${new Date()
+    name: "Uncapitalize a random letter - 1",
+    description: `Must uncapitalize all ${new Date()
       .toLocaleDateString("en-US", {
         month: "long",
         timeZone: "America/New_York",
@@ -337,8 +337,8 @@ export const Rules: RuleStore = [
         timeZone: "America/New_York",
       })[0];
 
-      const includesCapitalChar = text.includes(char.toUpperCase());
-      const includesLowercaseChar = !text.includes(char.toLowerCase());
+      const includesCapitalChar = !text.includes(char.toUpperCase());
+      const includesLowercaseChar = text.includes(char.toLowerCase());
 
       // get an array of all the occurrences of the char in the text
       const occurrences = getMatches(text, [char]);
@@ -350,8 +350,8 @@ export const Rules: RuleStore = [
     },
   },
   {
-    name: "Capitalize a random letter - 2",
-    description: `Must capitalize all ${new Date()
+    name: "Uncapitalize a random letter - 2",
+    description: `Must uncapitalize all ${new Date()
       .toLocaleDateString("en-US", {
         month: "long",
         timeZone: "America/New_York",
@@ -363,8 +363,8 @@ export const Rules: RuleStore = [
         month: "long",
         timeZone: "America/New_York",
       })[1];
-      const includesCapitalChar = text.includes(char.toUpperCase());
-      const includesLowercaseChar = !text.includes(char.toLowerCase());
+      const includesCapitalChar = !text.includes(char.toUpperCase());
+      const includesLowercaseChar = text.includes(char.toLowerCase());
 
       const occurrences = getMatches(text, [char]);
 
