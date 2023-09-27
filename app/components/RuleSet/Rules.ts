@@ -51,43 +51,14 @@ export const Rules: RuleStore = [
     name: "Continue the story-1",
     description: "There's not enough words here. Add some more",
     validation: (text: string) => {
-      const firstSentence = (text: string) => {
-        const firstSlice = text
-          .toLowerCase()
-          .slice(0, 100)
-          .replace(/\n$/, "")
-          .trim();
-        //  match the first sentence with fairy tale beginning and grab that sentence
-        const firstSentenceSlice = fairyTaleBeginnings.find((beginning) =>
-          firstSlice.startsWith(beginning.toLowerCase().trim())
-        );
-        return firstSentenceSlice ? firstSentenceSlice : "";
-      };
+      // clean up the text by removing line break and extra spaces
+      const cleanedText = text.replace(/\n/g, " ").replace(/\s+/g, " ");
+      const words = cleanedText.split(" ");
 
-      const lastSentence = (text: string) => {
-        const lastSlice = text
-          .toLowerCase()
-          .slice(-100)
-          .replace(/\n$/, "")
-          .trim();
-        //  match the last sentence with 'the end' and grab that sentence
-        const lastSentenceSlice = lastSlice.endsWith("the end")
-          ? "the end"
-          : "";
-        return lastSentenceSlice;
-      };
+      const wordCount = words.length;
+      const isPassing = wordCount >= 20;
 
-      const firstSentenceIndex = text.indexOf(firstSentence(text));
-      const lastSentenceIndex = text.indexOf(lastSentence(text));
-
-      const textBetweenFirstAndLastSentence = text.slice(
-        firstSentenceIndex + firstSentence(text).length,
-        lastSentenceIndex
-      );
-
-      const words = textBetweenFirstAndLastSentence.match(/[^ ,\-\n]+/g);
-
-      return words ? words.length >= 10 : false;
+      return isPassing;
     },
   },
   {
