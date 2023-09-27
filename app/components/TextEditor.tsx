@@ -280,7 +280,6 @@ function QuillEditor(props: EditorProps) {
             editor: ReactQuill.UnprivilegedEditor
           ) => {
             setIsLoaded(false);
-            // setTextDelta(editor.getText());
 
             // debounce()
             debounceRef.current?.();
