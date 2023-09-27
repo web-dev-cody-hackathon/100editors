@@ -9,7 +9,6 @@ interface ValidateTextProps {
   slug: string;
   setIsLoaded: React.Dispatch<React.SetStateAction<boolean>>;
   setAttemptedRules: React.Dispatch<React.SetStateAction<Rule[]>>;
-  attemptedRules: Rule[];
 }
 
 export const validateText = (props: ValidateTextProps) => {
@@ -22,7 +21,6 @@ export const validateText = (props: ValidateTextProps) => {
     slug,
     setIsLoaded,
     setAttemptedRules,
-    attemptedRules,
   } = props;
 
   const failedRules: Rule[] = [];

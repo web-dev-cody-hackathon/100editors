@@ -37,14 +37,12 @@ export default function DocumentWrapper(props: DocumentWrapperProps) {
         isCompleted={isCompleted}
         text={text}
         setText={setText}
-        setTextDelta={setTextDelta}
         textDelta={textDelta}
         setIsLoaded={setIsLoaded}
         slugId={slugId}
         passedRules={passedRules}
         failedRules={failedRules}
         setAttemptedRules={setAttemptedRules}
-        attemptedRules={attemptedRules}
       />
       <RuleSet
         passedRules={passedRules}
