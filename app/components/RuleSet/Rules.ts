@@ -52,7 +52,7 @@ export const Rules: RuleStore = [
   {
     name: "Continue the story-1",
     description: "There's not enough words here. Add some more",
-    validation: (text: string) => {
+    validation: ({ text }) => {
       // clean up the text by removing line break and extra spaces
       const cleanedText = text.replace(/\n/g, " ").replace(/\s+/g, " ");
       const words = cleanedText.split(" ");
@@ -61,7 +61,6 @@ export const Rules: RuleStore = [
       const isPassing = wordCount >= 20;
 
       return isPassing;
-
     },
   },
   {
