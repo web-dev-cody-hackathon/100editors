@@ -50,7 +50,8 @@ function Card({ text, SvgIcon }: CardProps) {
   return (
     <div className="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 w-full">
       {SvgIcon}
-      <p className="mt-3 font-normal text-gray-500 dark:text-gray-400">
+      {/* word wrap */}
+      <p className="mt-3 font-normal text-gray-500 dark:text-gray-400 break-words">
         {text}
       </p>
     </div>

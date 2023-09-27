@@ -373,6 +373,60 @@ export const Rules: RuleStore = [
         : includesCapitalChar && includesLowercaseChar;
     },
   },
+
+  {
+    name: "Must have at least 3 paragraphs",
+    description: "Must have at least 3 paragraphs",
+    validation: ({ text }) => {
+      const paragraphs = text.split("\n\n").filter((p) => p !== "");
+      return paragraphs.length >= 3;
+    },
+  },
+  {
+    name: "Alliteration avalanche",
+    description:
+      "It's Alliteration time! Create a sentence with 10 words that start with the same letter",
+    validation: ({ text }) => {
+      const sentences = text
+        .split(/\.|\!|\?|\n/)
+        .filter((s) => s !== "")
+        .map((s) => s.trim());
+
+      const alliterationSentences = sentences.filter((sentence) => {
+        const words = sentence.split(" ");
+        const firstLetter = words[0][0];
+        const isAlliteration = words.every(
+          (word) => word[0]?.toLowerCase() === firstLetter.toLowerCase()
+        );
+
+        return isAlliteration;
+      });
+
+      const isLongEnough = alliterationSentences.some((sentence) => {
+        const words = sentence.split(" ");
+        return words.length >= 10;
+      });
+
+      const isPassing = alliterationSentences.length >= 1 && isLongEnough;
+
+      if (!isPassing) {
+        console.log(
+          `Alliteration sentences found: ${
+            alliterationSentences.toString() || "none"
+          } ${
+            isLongEnough
+              ? ""
+              : `|| Hint: Make it longer. Add ${
+                  10 - alliterationSentences[0]?.split(" ").length || 10
+                } more words`
+          }
+`
+        );
+      }
+
+      return isPassing;
+    },
+  },
   {
     name: "Add emojis",
     description:
