@@ -39,7 +39,7 @@ export const validateText = (props: ValidateTextProps) => {
       }
 
       rule.attempted = true;
-      if (!rule.validation(text, slug)) {
+      if (!rule.validation({ text, slug })) {
         rule.completed = false;
       } else {
         rule.completed = true;
@@ -52,7 +52,7 @@ export const validateText = (props: ValidateTextProps) => {
     for (let i = 0; i < rules.length; i++) {
       const rule = rules[i];
       if (rule.attempted) {
-        if (!rule.validation(text, slug)) {
+        if (!rule.validation({ text, slug })) {
           rule.isPassing = false;
           failedRules.push(rule);
         } else {
