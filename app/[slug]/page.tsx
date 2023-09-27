@@ -1,11 +1,12 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useMutation, useQuery } from "convex/react";
+import { useConvex, useMutation, useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { useEffect, useState } from "react";
 import { Id } from "@/convex/_generated/dataModel";
 import RoomTimer from "../components/Timer/RoomTimer";
+import { timeElapsed } from "../components/Timer/utils";
 
 // we must disable SSR since ReactQuill attempts to access the `document`
 const DocumentWrapper = dynamic(() => import("../components/DocumentWrapper"), {
@@ -17,16 +18,26 @@ interface PageParams {
     slug: string;
   };
 }
+interface slugData {
+  _id: Id<"slugs">;
+  _creationTime: number;
+  passedTests?: number | undefined;
+  failedTests?: number | undefined;
+  endTime?: number | undefined;
+  slug: string;
+  startTime: number;
+  docText: string;
+}
+
 export default function Page(props: PageParams) {
   const { params } = props;
   const { slug } = params;
-  const [usersInRoom, setUsersInRoom] = useState<string[]>([]);
-
   const createSlug = useMutation(api.slugs.createSlug);
-  const [slugId, setSlugId] = useState<Id<"slugs"> | undefined>(undefined);
-  const getSlug = useQuery(api.slugs.getSlug, {
-    slug: slug,
-  });
+  const [usersInRoom, setUsersInRoom] = useState<string[]>([]);
+  const [slugId, setSlugId] = useState<Id<"slugs"> | undefined>();
+  const [textDelta, setTextDelta] = useState<string>("");
+  const [currentSlugData, setCurrentSlugData] = useState<slugData | null>();
+  const convex = useConvex();
 
   useEffect(() => {
     createSlugFn();
@@ -34,11 +45,22 @@ export default function Page(props: PageParams) {
   }, []);
 
   async function createSlugFn() {
-    const res = await createSlug({
+    const getTheSlug = await convex.query(api.slugs.getSlug, {
       slug: slug,
     });
+    setCurrentSlugData(getTheSlug);
 
-    setSlugId(res as Id<"slugs">);
+    if (!getTheSlug) {
+      const res = await createSlug({
+        slug: slug,
+        docText: "",
+      });
+
+      setSlugId(res as Id<"slugs">);
+    } else {
+      setSlugId(getTheSlug._id);
+      setTextDelta(getTheSlug.docText);
+    }
   }
 
   return (
@@ -49,8 +71,17 @@ export default function Page(props: PageParams) {
           <div>
             <h3 className="text-2xl">{slug ? `Room: ${slug}` : ""}</h3>
             <h3>Editors Online: {usersInRoom.length + 1}</h3>
-            {getSlug ? (
-              <RoomTimer start={getSlug._creationTime} />
+            {currentSlugData ? (
+              !currentSlugData.endTime ? (
+                <RoomTimer start={currentSlugData.startTime} />
+              ) : (
+                <>
+                  {`Completed in: ${timeElapsed({
+                    start: currentSlugData.startTime,
+                    end: currentSlugData.endTime || Date.now(),
+                  })}`}
+                </>
+              )
             ) : (
               <div>Loading...</div>
             )}
@@ -59,8 +90,9 @@ export default function Page(props: PageParams) {
         <DocumentWrapper
           slug={slug}
           slugId={slugId}
-          usersInRoom={usersInRoom}
           setUsersInRoom={setUsersInRoom}
+          textDelta={textDelta}
+          setTextDelta={setTextDelta}
         />
       </div>
     </main>

@@ -1,14 +1,23 @@
-import { ReactElement } from "react";
+import { CSSProperties, ReactElement } from "react";
 import { Rule } from "./Rules";
 import { BsFillEmojiAngryFill, BsFillEmojiHeartEyesFill } from "react-icons/bs";
+import PacmanLoader from "react-spinners/PacmanLoader";
 
 interface RuleSetProps {
   passedRules: Rule[];
   failedRules: Rule[];
+  isLoaded: boolean;
+  attemptedRules: Rule[];
 }
 
+const spinnerStyle: CSSProperties = {
+  display: "block",
+  margin: "0 auto",
+  borderColor: "red",
+};
+
 export default function RuleSet(props: RuleSetProps) {
-  const { passedRules, failedRules } = props;
+  const { passedRules, failedRules, isLoaded, attemptedRules } = props;
 
   return (
     <div className="flex flex-col items-center align-items h-[76vh] ">
@@ -16,17 +25,18 @@ export default function RuleSet(props: RuleSetProps) {
         Rules (Passed: {passedRules.length} of{" "}
         {passedRules.length + failedRules.length})
       </h3>
+      <div className="h-[10px] mt-1">
+        <PacmanLoader
+          color={"#36d7b7"}
+          loading={!isLoaded}
+          cssOverride={spinnerStyle}
+          size={10}
+          aria-label="Loading Spinner"
+          data-testid="loader"
+        />
+      </div>
       <div className="min-w-[20vw] p-6 min-h-[60vh] max-w-[20vw] overflow-y-auto scrollbar scrollbar-thumb-gray-900 scrollbar-track-gray-100">
-        <CardList
-          rules={failedRules}
-          SvgIcon={<BsFillEmojiAngryFill className="text-red-500 h-7 w-7" />}
-        />
-        <CardList
-          rules={passedRules}
-          SvgIcon={
-            <BsFillEmojiHeartEyesFill className="text-green-500 h-7 w-7" />
-          }
-        />
+        <CardList attemptedRules={attemptedRules} />
       </div>
     </div>
   );
@@ -48,16 +58,24 @@ function Card({ text, SvgIcon }: CardProps) {
 }
 
 type CardListProps = {
-  rules: Rule[];
-  SvgIcon: ReactElement;
+  attemptedRules: Rule[];
 };
-function CardList({ rules, SvgIcon }: CardListProps) {
+function CardList({ attemptedRules }: CardListProps) {
   return (
     <ul>
-      {rules.map((rule) => {
+      {attemptedRules.map((rule) => {
         return (
           <li key={rule.description} className="flex flex-row py-2">
-            <Card text={rule.description} SvgIcon={SvgIcon} />
+            <Card
+              text={rule.description}
+              SvgIcon={
+                rule.isPassing ? (
+                  <BsFillEmojiHeartEyesFill className="text-green-500 h-7 w-7" />
+                ) : (
+                  <BsFillEmojiAngryFill className="text-red-500 h-7 w-7" />
+                )
+              }
+            />
           </li>
         );
       })}
