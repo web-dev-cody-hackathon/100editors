@@ -37,11 +37,12 @@ interface TextEditorProps extends ReactQuillProps {
   text: Y.Text | undefined;
   setText: React.Dispatch<React.SetStateAction<Y.Text | undefined>>;
   textDelta: string;
-  setTextDelta: React.Dispatch<React.SetStateAction<string>>;
+
   setIsLoaded: React.Dispatch<React.SetStateAction<boolean>>;
   slugId?: Id<"slugs"> | undefined;
   passedRules: Rule[];
   failedRules: Rule[];
+  setAttemptedRules: React.Dispatch<React.SetStateAction<Rule[]>>;
 }
 
 export default function TextEditor(props: TextEditorProps) {
@@ -54,12 +55,12 @@ export default function TextEditor(props: TextEditorProps) {
     isCompleted,
     text,
     setText,
-    setTextDelta,
     textDelta,
     setIsLoaded,
     slugId,
     passedRules,
     failedRules,
+    setAttemptedRules,
   } = props;
 
   const [provider, setProvider] = useState<WebrtcProviderType>();
@@ -128,11 +129,11 @@ export default function TextEditor(props: TextEditorProps) {
         isCompleted={isCompleted}
         slug={slug}
         textDelta={textDelta}
-        setTextDelta={setTextDelta}
         setIsLoaded={setIsLoaded}
         slugId={slugId}
         passedRules={passedRules}
         failedRules={failedRules}
+        setAttemptedRules={setAttemptedRules}
       />
     </div>
   );
@@ -147,11 +148,12 @@ type EditorProps = {
   slug: string;
   isCompleted: boolean;
   textDelta: string;
-  setTextDelta: React.Dispatch<React.SetStateAction<string>>;
+
   setIsLoaded: React.Dispatch<React.SetStateAction<boolean>>;
   slugId?: Id<"slugs"> | undefined;
   passedRules: Rule[];
   failedRules: Rule[];
+  setAttemptedRules: React.Dispatch<React.SetStateAction<Rule[]>>;
 };
 
 function QuillEditor(props: EditorProps) {
@@ -164,11 +166,12 @@ function QuillEditor(props: EditorProps) {
     slug,
     isCompleted,
     textDelta,
-    setTextDelta,
+
     setIsLoaded,
     slugId,
     passedRules,
     failedRules,
+    setAttemptedRules,
   } = props;
   const reactQuillRef = useRef<ReactQuill>(null);
   const debounceRef = useRef<ReturnType<typeof debounce>>();
@@ -193,8 +196,6 @@ function QuillEditor(props: EditorProps) {
       return;
     }
 
-    console.log("textDelta:", textDelta);
-
     const quill = reactQuillRef.current.getEditor();
     if (provider?.room?.bcConns.size === 0) {
       quill.setText(textDelta);
@@ -218,6 +219,7 @@ function QuillEditor(props: EditorProps) {
       setPassedRules,
       setIsCompleted,
       setIsLoaded,
+      setAttemptedRules,
     });
   }, [setFailedRules, setIsCompleted, setPassedRules]);
 
@@ -231,6 +233,7 @@ function QuillEditor(props: EditorProps) {
         setPassedRules,
         setIsCompleted,
         setIsLoaded,
+        setAttemptedRules,
       });
     }, 1000);
 

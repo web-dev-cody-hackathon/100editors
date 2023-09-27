@@ -1,5 +1,3 @@
-import { digits } from "./ValidationLists";
-
 const arrayToRegex = (stringsToMatch: string[], options: string): RegExp => {
   // Escape any special characters in the input strings and join them with the "|" (OR) operator.
   const escapedStrings = stringsToMatch.map((str) =>
