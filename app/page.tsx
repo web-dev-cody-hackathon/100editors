@@ -26,6 +26,13 @@ export default function Home() {
             <footer className="mt-10">
               <p>Made by members of the 100Devs Community</p>
               <p>Not associated with 100Devs</p>
+              <a
+                className="text-blue-600"
+                href="https://github.com/web-dev-cody-hackathon/100editors"
+                target="_blank"
+              >
+                View github repository
+              </a>
             </footer>
           </div>
         </div>
